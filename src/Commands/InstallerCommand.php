@@ -46,32 +46,32 @@ class InstallerCommand extends Command
     /**
      * Auth interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepository
+     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
      */
-    protected $authRepository;
+    protected $authRepo;
 
     /**
      * Permission interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Permission\PermissionRepository
+     * @var \Laraflock\Dashboard\Repositories\Permission\PermissionRepo
      */
-    protected $permissionRepository;
+    protected $permissionRepo;
 
     /**
      * Role interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepository
+     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepo
      */
-    protected $roleRepository;
+    protected $roleRepo;
 
     /**
      * Create a new command instance.
      */
     public function __construct()
     {
-        $this->authRepository       = app()->make('Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface');
-        $this->permissionRepository = app()->make('Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface');
-        $this->roleRepository       = app()->make('Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface');
+        $this->authRepo       = app()->make('Laraflock\Dashboard\Repositories\Auth\AuthRepo');
+        $this->permissionRepo = app()->make('Laraflock\Dashboard\Repositories\Permission\PermissionRepo');
+        $this->roleRepo       = app()->make('Laraflock\Dashboard\Repositories\Role\RoleRepo');
 
         parent::__construct();
     }
@@ -356,19 +356,19 @@ STEP
         $config = $this->user;
 
         // Create default permission.
-        $this->permissionRepository->create([
+        $this->permissionRepo->create([
           'name' => 'Administrator (Full Access)',
           'slug' => 'admin',
         ], false);
 
         // Create default role.
-        $this->roleRepository->create([
+        $this->roleRepo->create([
           'name' => 'Registered',
           'slug' => 'registered',
         ], false);
 
         // Create the admin role.
-        $role = $this->roleRepository->create([
+        $role = $this->roleRepo->create([
           'name'        => 'Administrator',
           'slug'        => 'administrator',
           'permissions' => [
@@ -377,7 +377,7 @@ STEP
         ], false);
 
         // Create the user.
-        $user = $this->authRepository->registerAndActivate([
+        $user = $this->authRepo->registerAndActivate([
           'email'      => array_get($config, 'email'),
           'first_name' => array_get($config, 'first'),
           'last_name'  => array_get($config, 'last'),

@@ -14,9 +14,9 @@ use Cartalyst\Sentinel\Roles\EloquentRole;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Database\QueryException;
 use Laraflock\Dashboard\Exceptions\RolesException;
-use Laraflock\Dashboard\Repositories\Base\BaseRepository;
 
-class RoleRepository extends BaseRepository implements RoleRepositoryInterface
+
+class RoleRepo implements RoleRepo
 {
     /**
      * EloquentRole instance.
@@ -84,7 +84,7 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
         }
 
         try {
-            $role = $this->sentinel->getRoleRepository()
+            $role = $this->sentinel->getRoleRepo()
                                    ->createModel()
                                    ->create($data);
         } catch (QueryException $e) {

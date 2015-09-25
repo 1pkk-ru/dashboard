@@ -1,8 +1,17 @@
 <?php
 
-namespace Laraflock\Dashboard\Repositories\Module;
+/**
+ * @package     Dashboard
+ * @author      Ian Olson <me@ianolson.io>
+ * @author      Daniel Klabbers <daniel@hyn.me>
+ * @license     MIT
+ * @copyright   2015, Laraflock
+ * @link        https://github.com/laraflock
+ */
 
-interface ModuleInterface
+namespace Laraflock\Dashboard\Contracts;
+
+interface Module
 {
     /**
      * A user-friendly name for your module

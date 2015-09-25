@@ -13,9 +13,9 @@ namespace Laraflock\Dashboard\Repositories\Permission;
 use Illuminate\Database\QueryException;
 use Laraflock\Dashboard\Exceptions\PermissionsException;
 use Laraflock\Dashboard\Models\Permission;
-use Laraflock\Dashboard\Repositories\Base\BaseRepository;
 
-class PermissionRepository extends BaseRepository implements PermissionRepositoryInterface
+
+class PermissionRepo implements PermissionRepo
 {
     /**
      * Permission instance.

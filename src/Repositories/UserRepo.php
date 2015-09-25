@@ -14,23 +14,23 @@ use Cartalyst\Sentinel\Sentinel;
 use Cartalyst\Sentinel\Users\EloquentUser;
 use Laraflock\Dashboard\Exceptions\RolesException;
 use Laraflock\Dashboard\Exceptions\UsersException;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface;
-use Laraflock\Dashboard\Repositories\Base\BaseRepository;
-use Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface;
+use Laraflock\Dashboard\Contracts\AuthRepo as Auth;
+use Laraflock\Dashboard\Contracts\RoleRepo as Role;
+use Laraflock\Dashboard\Contracts\UserRepo as User;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class UserRepo implements User
 {
     /**
      * Auth interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface
+     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
      */
     protected $auth;
 
     /**
      * Role interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface
+     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepo
      */
     protected $role;
 
@@ -51,12 +51,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * The constructor.
      *
-     * @param \Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface $auth
-     * @param \Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface $role
-     * @param \Cartalyst\Sentinel\Sentinel                                   $sentinel
-     * @param \Cartalyst\Sentinel\Users\EloquentUser                         $user
+     * @param Auth         $auth
+     * @param Role         $role
+     * @param Sentinel     $sentinel
+     * @param EloquentUser $user
      */
-    public function __construct(AuthRepositoryInterface $auth, RoleRepositoryInterface $role, Sentinel $sentinel, EloquentUser $user)
+    public function __construct(Auth $auth, Role $role, Sentinel $sentinel, EloquentUser $user)
     {
         $this->auth     = $auth;
         $this->role     = $role;

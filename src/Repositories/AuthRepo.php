@@ -8,24 +8,24 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\Auth;
+namespace Laraflock\Dashboard\Repositories;
 
-use Cartalyst\Sentinel\Activations\IlluminateActivationRepository;
+use Cartalyst\Sentinel\Activations\IlluminateActivationRepo;
 use Cartalyst\Sentinel\Sentinel;
 use Cartalyst\Sentinel\Users\EloquentUser;
 use Illuminate\Database\QueryException;
 use Laraflock\Dashboard\Exceptions\AuthenticationException;
 use Laraflock\Dashboard\Exceptions\RolesException;
-use Laraflock\Dashboard\Repositories\Base\BaseRepository;
 
-class AuthRepository extends BaseRepository implements AuthRepositoryInterface
+
+class AuthRepo implements AuthRepo
 {
     /**
      * Activation interface.
      *
-     * @var \Cartalyst\Sentinel\Activations\ActivationRepositoryInterface
+     * @var \Cartalyst\Sentinel\Activations\ActivationRepo
      */
-    protected $illuminateActivationRepository;
+    protected $illuminateActivationRepo;
 
     /**
      * Sentinel instance.
@@ -39,9 +39,9 @@ class AuthRepository extends BaseRepository implements AuthRepositoryInterface
      *
      * @param \Cartalyst\Sentinel\Sentinel $sentinel
      */
-    public function __construct(IlluminateActivationRepository $illuminateActivationRepository, Sentinel $sentinel)
+    public function __construct(IlluminateActivationRepo $illuminateActivationRepo, Sentinel $sentinel)
     {
-        $this->illuminateActivationRepository = $illuminateActivationRepository;
+        $this->illuminateActivationRepo = $illuminateActivationRepo;
         $this->sentinel                       = $sentinel;
     }
 
@@ -128,7 +128,7 @@ class AuthRepository extends BaseRepository implements AuthRepositoryInterface
         $role->users()
              ->attach($user);
 
-        if (!$activation = $this->illuminateActivationRepository->create($user)) {
+        if (!$activation = $this->illuminateActivationRepo->create($user)) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.activation.create'));
         }
 
@@ -186,7 +186,7 @@ class AuthRepository extends BaseRepository implements AuthRepositoryInterface
 
         $user = $this->findByCredentials(['login' => $data['email']]);
 
-        if (!$this->illuminateActivationRepository->complete($user, $data['activation_code'])) {
+        if (!$this->illuminateActivationRepo->complete($user, $data['activation_code'])) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.activation.complete'));
         }
 

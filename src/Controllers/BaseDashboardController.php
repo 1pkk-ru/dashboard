@@ -11,72 +11,72 @@
 namespace Laraflock\Dashboard\Controllers;
 
 use Illuminate\Routing\Controller;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface;
-use Laraflock\Dashboard\Repositories\Module\ModuleRepositoryInterface;
-use Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface;
-use Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface;
-use Laraflock\Dashboard\Repositories\User\UserRepositoryInterface;
+use Laraflock\Dashboard\Repositories\Auth\AuthRepo;
+use Laraflock\Dashboard\Repositories\Module\ModuleRepo;
+use Laraflock\Dashboard\Repositories\Permission\PermissionRepo;
+use Laraflock\Dashboard\Repositories\Role\RoleRepo;
+use Laraflock\Dashboard\Repositories\User\UserRepo;
 
 class BaseDashboardController extends Controller
 {
     /**
      * Auth interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface
+     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
      */
-    protected $authRepositoryInterface;
+    protected $authRepo;
 
     /**
      * Permission interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface
+     * @var \Laraflock\Dashboard\Repositories\Permission\PermissionRepo
      */
-    protected $permissionRepositoryInterface;
+    protected $permissionRepo;
 
     /**
      * Role interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface
+     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepo
      */
-    protected $roleRepositoryInterface;
+    protected $roleRepo;
 
     /**
      * User interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\User\UserRepositoryInterface
+     * @var \Laraflock\Dashboard\Repositories\User\UserRepo
      */
-    protected $userRepositoryInterface;
+    protected $userRepo;
 
     /**
      * The constructor.
      *
-     * @param \Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface $authRepositoryInterface
-     * @param \Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface $permissionRepositoryInterface
-     * @param \Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface $roleRepositoryInterface
-     * @param \Laraflock\Dashboard\Repositories\User\UserRepositoryInterface $userRepositoryInterface
-     * @param \Laraflock\Dashboard\Repositories\Module\ModuleRepositoryInterface $moduleRepositoryInterface
+     * @param \Laraflock\Dashboard\Repositories\Auth\AuthRepo $authRepo
+     * @param \Laraflock\Dashboard\Repositories\Permission\PermissionRepo $permissionRepo
+     * @param \Laraflock\Dashboard\Repositories\Role\RoleRepo $roleRepo
+     * @param \Laraflock\Dashboard\Repositories\User\UserRepo $userRepo
+     * @param \Laraflock\Dashboard\Repositories\Module\ModuleRepo $moduleRepo
      */
     public function __construct(
-        AuthRepositoryInterface $authRepositoryInterface,
-        PermissionRepositoryInterface $permissionRepositoryInterface,
-        RoleRepositoryInterface $roleRepositoryInterface,
-        UserRepositoryInterface $userRepositoryInterface,
-        ModuleRepositoryInterface $moduleRepositoryInterface
+        AuthRepo $authRepo,
+        PermissionRepo $permissionRepo,
+        RoleRepo $roleRepo,
+        UserRepo $userRepo,
+        ModuleRepo $moduleRepo
     )
     {
         $viewNamespace = config('laraflock.dashboard.viewNamespace');
 
-        $this->authRepositoryInterface       = $authRepositoryInterface;
-        $this->permissionRepositoryInterface = $permissionRepositoryInterface;
-        $this->roleRepositoryInterface       = $roleRepositoryInterface;
-        $this->userRepositoryInterface       = $userRepositoryInterface;
+        $this->authRepo       = $authRepo;
+        $this->permissionRepo = $permissionRepo;
+        $this->roleRepo       = $roleRepo;
+        $this->userRepo       = $userRepo;
 
-        $user = $this->authRepositoryInterface->getActiveUser();
+        $user = $this->authRepo->getActiveUser();
 
         view()->share([
             'activeUser' => $user,
             'viewNamespace' => $viewNamespace,
-            'modules' => $moduleRepositoryInterface
+            'modules' => $moduleRepo
         ]);
     }
 

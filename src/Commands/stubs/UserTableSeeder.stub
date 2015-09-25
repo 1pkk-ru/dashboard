@@ -9,9 +9,9 @@
  */
 
 use Illuminate\Database\Seeder;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface as Auth;
-use Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface as Role;
-use Laraflock\Dashboard\Repositories\User\UserRepositoryInterface as User;
+use Laraflock\Dashboard\Repositories\Auth\AuthRepo as Auth;
+use Laraflock\Dashboard\Repositories\Role\RoleRepo as Role;
+use Laraflock\Dashboard\Repositories\User\UserRepo as User;
 
 class UserTableSeeder extends Seeder
 {

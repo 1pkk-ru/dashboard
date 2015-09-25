@@ -41,7 +41,7 @@ class AccountController extends BaseDashboardController
     {
         if ($request->input('action') == 'update_account') {
             try {
-                $this->userRepositoryInterface->update($request->all(), $id);
+                $this->userRepo->update($request->all(), $id);
             } catch (FormValidationException $e) {
                 Flash::error($e->getMessage());
 
@@ -62,7 +62,7 @@ class AccountController extends BaseDashboardController
 
         if ($request->input('action') == 'change_password') {
             try {
-                $this->userRepositoryInterface->updatePassword($request->all());
+                $this->userRepo->updatePassword($request->all());
             } catch (FormValidationException $e) {
                 Flash::error($e->getMessage());
 

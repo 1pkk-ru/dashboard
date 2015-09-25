@@ -27,7 +27,7 @@ class PermissionsController extends BaseDashboardController
      */
     public function index()
     {
-        $permissions = $this->permissionRepositoryInterface->getAll();
+        $permissions = $this->permissionRepo->getAll();
 
         return $this->view('permissions.index')->with(['permissions' => $permissions]);
     }
@@ -52,7 +52,7 @@ class PermissionsController extends BaseDashboardController
     public function store(Request $request)
     {
         try {
-            $this->permissionRepositoryInterface->create($request->all());
+            $this->permissionRepo->create($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -76,7 +76,7 @@ class PermissionsController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$permission = $this->permissionRepositoryInterface->getById($id)) {
+        if (!$permission = $this->permissionRepo->getById($id)) {
             Flash::error(trans('dashboard::dashboard.errors.permission.found'));
 
             return redirect()->route('permissions.index');
@@ -96,7 +96,7 @@ class PermissionsController extends BaseDashboardController
     public function update(Request $request, $id)
     {
         try {
-            $this->permissionRepositoryInterface->update($request->all(), $id);
+            $this->permissionRepo->update($request->all(), $id);
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -125,7 +125,7 @@ class PermissionsController extends BaseDashboardController
     public function delete($id)
     {
         try {
-            $this->permissionRepositoryInterface->delete($id);
+            $this->permissionRepo->delete($id);
         } catch (PermissionsException $e) {
             Flash::error($e->getMessage());
 

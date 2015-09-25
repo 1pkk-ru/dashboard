@@ -9,7 +9,7 @@
  */
 
 use Illuminate\Database\Seeder;
-use Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface as Permission;
+use Laraflock\Dashboard\Repositories\Permission\PermissionRepo as Permission;
 
 class PermissionTableSeeder extends Seeder
 {

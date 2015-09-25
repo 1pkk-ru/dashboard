@@ -4,7 +4,7 @@ namespace Laraflock\Dashboard\Repositories\Module;
 
 use Illuminate\Support\Collection;
 
-class ModuleRepository implements ModuleRepositoryInterface
+class ModuleRepo implements ModuleRepo
 {
 
     /**
@@ -20,10 +20,10 @@ class ModuleRepository implements ModuleRepositoryInterface
     /**
      * Registers a dashboard module into the ecosystem
      *
-     * @param ModuleInterface $module
+     * @param Module $module
      * @return bool
      */
-    public function register(ModuleInterface $module)
+    public function register(Module $module)
     {
         $this->modules->put(get_class($module), $module);
     }
@@ -41,10 +41,10 @@ class ModuleRepository implements ModuleRepositoryInterface
     /**
      * Verify whether a module has been registered
      *
-     * @param ModuleInterface $module
+     * @param Module $module
      * @return mixed
      */
-    public function isRegistered(ModuleInterface $module)
+    public function isRegistered(Module $module)
     {
         return $this->modules->offsetExists(get_class($module));
     }

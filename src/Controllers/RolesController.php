@@ -25,7 +25,7 @@ class RolesController extends BaseDashboardController
      */
     public function index()
     {
-        $roles = $this->roleRepositoryInterface->getAll();
+        $roles = $this->roleRepo->getAll();
 
         return $this->view('roles.index')->with(['roles' => $roles]);
     }
@@ -37,7 +37,7 @@ class RolesController extends BaseDashboardController
      */
     public function create()
     {
-        $permissions = $this->permissionRepositoryInterface->getAll();
+        $permissions = $this->permissionRepo->getAll();
 
         return $this->view('roles.create')->with(['permissions' => $permissions]);
     }
@@ -52,7 +52,7 @@ class RolesController extends BaseDashboardController
     public function store(Request $request)
     {
         try {
-            $this->roleRepositoryInterface->create($request->all());
+            $this->roleRepo->create($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -76,13 +76,13 @@ class RolesController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$role = $this->roleRepositoryInterface->getById($id)) {
+        if (!$role = $this->roleRepo->getById($id)) {
             Flash::error(trans('dashboard::dashboard.errors.role.found'));
 
             return redirect()->route('roles.index');
         }
 
-        $permissions = $this->permissionRepositoryInterface->getAll();
+        $permissions = $this->permissionRepo->getAll();
 
         return $this->view('roles.edit')->with(['role' => $role, 'permissions' => $permissions]);
     }
@@ -98,7 +98,7 @@ class RolesController extends BaseDashboardController
     public function update(Request $request, $id)
     {
         try {
-            $this->roleRepositoryInterface->update($request->all(), $id);
+            $this->roleRepo->update($request->all(), $id);
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -127,7 +127,7 @@ class RolesController extends BaseDashboardController
     public function delete($id)
     {
         try {
-            $this->roleRepositoryInterface->delete($id);
+            $this->roleRepo->delete($id);
         } catch (RolesException $e) {
             Flash::error($e->getMessage());
 

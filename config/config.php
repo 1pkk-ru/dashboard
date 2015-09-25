@@ -112,104 +112,104 @@ return [
     'viewNamespace'             => 'dashboard',
     /*
     |--------------------------------------------------------------------------
-    | Auth Repository Class
+    | Auth Repo Class
     |--------------------------------------------------------------------------
     |
-    | Use package auth repository class, or use your own. This will
+    | Use package auth Repo class, or use your own. This will
     | automatically bind inside the service provider.
     |
-    | Default Repository: Laraflock\Dashboard\Repositories\Auth\AuthRepository
+    | Default Repo: Laraflock\Dashboard\Repositories\Auth\AuthRepo
     |
     | * NOTICE *
-    | If you would like to use your own repository class, be sure to implement
-    | the following interface and extend the base repository class:
+    | If you would like to use your own Repo class, be sure to implement
+    | the following interface and extend the base Repo class:
     |
-    | Base Repository: Laraflock\Dashboard\Repositories\Base\BaseRepository
-    | Auth Interface: Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface
+    | Base Repo: Laraflock\Dashboard\Repositories\Base\BaseRepo
+    | Auth Interface: Laraflock\Dashboard\Repositories\Auth\AuthRepo
     |
     */
 
-    'authRepositoryClass'       => 'Laraflock\Dashboard\Repositories\Auth\AuthRepository',
+    'auth'       => 'Laraflock\Dashboard\Repositories\Auth\AuthRepo',
     /*
     |--------------------------------------------------------------------------
-    | Permission Repository Class
+    | Permission Repo Class
     |--------------------------------------------------------------------------
     |
-    | Use package permission repository class, or use your own. This will
+    | Use package permission Repo class, or use your own. This will
     | automatically bind inside the service provider.
     |
-    | Default Repository: Laraflock\Dashboard\Repositories\Permission\PermissionRepository
+    | Default Repo: Laraflock\Dashboard\Repositories\Permission\PermissionRepo
     |
     | * NOTICE *
-    | If you would like to use your own repository class, be sure to implement
-    | the following interface and extend the base repository class:
+    | If you would like to use your own Repo class, be sure to implement
+    | the following interface and extend the base Repo class:
     |
-    | Base Repository: Laraflock\Dashboard\Repositories\Base\BaseRepository
-    | Permission Interface: Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface
+    | Base Repo: Laraflock\Dashboard\Repositories\Base\BaseRepo
+    | Permission Interface: Laraflock\Dashboard\Repositories\Permission\PermissionRepo
     |
     */
 
-    'permissionRepositoryClass' => 'Laraflock\Dashboard\Repositories\Permission\PermissionRepository',
+    'permission' => 'Laraflock\Dashboard\Repositories\Permission\PermissionRepo',
     /*
     |--------------------------------------------------------------------------
-    | Role Repository Class
+    | Role Repo Class
     |--------------------------------------------------------------------------
     |
-    | Use package role repository class, or use your own. This will
+    | Use package role Repo class, or use your own. This will
     | automatically bind inside the service provider.
     |
-    | Default Repository: Laraflock\Dashboard\Repositories\Role\RoleRepository
+    | Default Repo: Laraflock\Dashboard\Repositories\Role\RoleRepo
     |
     | * NOTICE *
-    | If you would like to use your own repository class, be sure to implement
-    | the following interface and extend the base repository class:
+    | If you would like to use your own Repo class, be sure to implement
+    | the following interface and extend the base Repo class:
     |
-    | Base Repository: Laraflock\Dashboard\Repositories\Base\BaseRepository
-    | Role Interface: Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface
+    | Base Repo: Laraflock\Dashboard\Repositories\Base\BaseRepo
+    | Role Interface: Laraflock\Dashboard\Repositories\Role\RoleRepo
     |
     */
 
-    'roleRepositoryClass'       => 'Laraflock\Dashboard\Repositories\Role\RoleRepository',
+    'role'       => 'Laraflock\Dashboard\Repositories\Role\RoleRepo',
     /*
     |--------------------------------------------------------------------------
-    | User Repository Class
+    | User Repo Class
     |--------------------------------------------------------------------------
     |
-    | Use package user repository class, or use your own. This will
+    | Use package user Repo class, or use your own. This will
     | automatically bind inside the service provider.
     |
-    | Default Repository: Laraflock\Dashboard\Repositories\User\UserRepository
+    | Default Repo: Laraflock\Dashboard\Repositories\User\UserRepo
     |
     | * NOTICE *
-    | If you would like to use your own repository class, be sure to implement
-    | the following interface and extend the base repository class:
+    | If you would like to use your own Repo class, be sure to implement
+    | the following interface and extend the base Repo class:
     |
-    | Base Repository: Laraflock\Dashboard\Repositories\Base\BaseRepository
-    | User Interface: Laraflock\Dashboard\Repositories\User\UserRepositoryInterface
+    | Base Repo: Laraflock\Dashboard\Repositories\Base\BaseRepo
+    | User Interface: Laraflock\Dashboard\Repositories\User\UserRepo
     |
     */
 
-    'userRepositoryClass'       => 'Laraflock\Dashboard\Repositories\User\UserRepository',
+    'user'       => 'Laraflock\Dashboard\Repositories\UserRepo',
 
     /*
     |--------------------------------------------------------------------------
-    | Module Repository Class
+    | Module Repo Class
     |--------------------------------------------------------------------------
     |
-    | Use package module repository class, or use your own. This will
+    | Use package module Repo class, or use your own. This will
     | automatically bind inside the service provider. If left blank the
-    | default repository class will be loaded.
+    | default Repo class will be loaded.
     |
-    | Default Repository: Laraflock\Dashboard\Repositories\Module\ModuleRepository
+    | Default Repo: Laraflock\Dashboard\Repositories\Module\ModuleRepo
     |
     | * NOTICE *
-    | If you would like to use your own repository class, be sure to implement
-    | the following interface and extend the base repository class:
+    | If you would like to use your own Repo class, be sure to implement
+    | the following interface and extend the base Repo class:
     |
-    | Module Repository Interface: Laraflock\Dashboard\Repositories\Module\ModuleRepositoryInterface
+    | Module Repo Interface: Laraflock\Dashboard\Repositories\Module\ModuleRepo
     |
      */
-    'moduleRepositoryClass'     => 'Laraflock\Dashboard\Repositories\Module\ModuleRepository',
+    'module'     => 'Laraflock\Dashboard\Repositories\ModuleRepo',
 
     /*
     |--------------------------------------------------------------------------

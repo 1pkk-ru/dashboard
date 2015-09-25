@@ -8,13 +8,13 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Middleware;
+namespace Laraflock\Dashboard\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface as Auth;
-use Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface as Role;
+use Laraflock\Dashboard\Repositories\Auth\AuthRepo as Auth;
+use Laraflock\Dashboard\Repositories\Role\RoleRepo as Role;
 
 class RoleMiddleware
 {

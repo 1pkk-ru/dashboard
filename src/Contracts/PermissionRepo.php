@@ -8,66 +8,55 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\Role;
+namespace Laraflock\Dashboard\Contracts;
 
-interface RoleRepositoryInterface
+interface PermissionRepo
 {
     /**
-     * Return all roles.
+     * Return all permissions.
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function getAll();
 
     /**
-     * Get role by id.
+     * Get permission by id.
      *
-     * @param int $id
+     * @param $id
      *
      * @return mixed
      */
     public function getById($id);
 
     /**
-     * Get role by slug.
-     *
-     * @param string $slug
-     *
-     * @return mixed
-     */
-    public function getBySlug($slug);
-
-    /**
-     * Create role.
+     * Create permission.
      *
      * @param array $data
      * @param bool  $validate
      *
-     * @return mixed
-     *
+     * @return static
      * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
      */
     public function create(array $data, $validate = true);
 
     /**
-     * Update role.
+     * Update permission.
      *
      * @param array $data
      * @param int   $id
      * @param bool  $validate
      *
      * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws \Laraflock\Dashboard\Exceptions\PermissionsException
      */
     public function update(array $data, $id, $validate = true);
 
     /**
-     * Delete role.
+     * Delete permission.
      *
      * @param int $id
      *
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws \Laraflock\Dashboard\Exceptions\PermissionsException
      */
     public function delete($id);
 }

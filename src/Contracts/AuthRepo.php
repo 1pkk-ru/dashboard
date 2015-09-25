@@ -8,9 +8,9 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\Auth;
+namespace Laraflock\Dashboard\Contracts;
 
-interface AuthRepositoryInterface
+interface AuthRepo
 {
     /**
      * Get active user.

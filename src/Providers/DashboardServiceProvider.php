@@ -29,9 +29,9 @@ use Laraflock\Dashboard\Commands\FreshCommand;
 use Laraflock\Dashboard\Commands\InstallerCommand;
 use Laraflock\Dashboard\Commands\SetupCommand;
 use Laraflock\Dashboard\Commands\UninstallCommand;
-use Laraflock\Dashboard\Middleware\UserMiddleware;
-use Laraflock\Dashboard\Middleware\RoleMiddleware;
-use Laraflock\Dashboard\Middleware\PermissionMiddleware;
+use Laraflock\Dashboard\Http\Middleware\UserMiddleware;
+use Laraflock\Dashboard\Http\Middleware\RoleMiddleware;
+use Laraflock\Dashboard\Http\Middleware\PermissionMiddleware;
 
 class DashboardServiceProvider extends ServiceProvider
 {
@@ -46,16 +46,16 @@ class DashboardServiceProvider extends ServiceProvider
         }
 
         // Load & Publish views.
-        $this->loadViewsFrom(__DIR__ . '/../Resources/views', $namespace);
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', $namespace);
         $this->publishes([
-          __DIR__ . '/../Resources/views' => base_path('resources/views/vendor/' . $namespace),
+          __DIR__ . '/../../resources/views' => base_path('resources/views/vendor/' . $namespace),
         ], 'views');
 
         // Load translations.
-        $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'dashboard');
+        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'dashboard');
 
         // Publish config.
-        $config = realpath(__DIR__ . '/../config.php');
+        $config = realpath(__DIR__ . '/../../config/config.php');
 
         $this->mergeConfigFrom($config, 'laraflock.dashboard');
 
@@ -65,11 +65,11 @@ class DashboardServiceProvider extends ServiceProvider
 
         // Use package routes.
         if (config('laraflock.dashboard.routes')) {
-            include __DIR__ . '/../routes.php';
+            include __DIR__ . '/../Http/routes.php';
         }
 
         // Publish migrations.
-        $migrations = realpath(__DIR__ . '/../Database/Migrations');
+        $migrations = realpath(__DIR__ . '/../../database/migrations');
 
         $this->publishes([
           $migrations => database_path('/migrations'),
@@ -77,7 +77,7 @@ class DashboardServiceProvider extends ServiceProvider
 
         // Publish assets.
         $this->publishes([
-          __DIR__ . '/../Resources/assets' => public_path('vendor/laraflock'),
+          __DIR__ . '/../../resources/assets' => public_path('assets'),
         ], 'public');
 
         // Setup interfaces.
@@ -99,9 +99,9 @@ class DashboardServiceProvider extends ServiceProvider
      * Register the middleware to the application
      *
      * Register the following middleware:
-     * - \Laraflock\Dashboard\Middleware\UserMiddleware
-     * - \Laraflock\Dashboard\Middleware\RoleMiddleware
-     * - \Laraflock\Dashboard\Middleware\PermissionMiddleware
+     * - \Laraflock\Dashboard\Http\Middleware\UserMiddleware
+     * - \Laraflock\Dashboard\Http\Middleware\RoleMiddleware
+     * - \Laraflock\Dashboard\Http\Middleware\PermissionMiddleware
      */
     protected function setupMiddleware()
     {
@@ -150,34 +150,34 @@ class DashboardServiceProvider extends ServiceProvider
      */
     protected function setupInterfaces()
     {
-        // Bind the Auth Repository Interface
+        // Bind the Auth Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface',
-          config('laraflock.dashboard.authRepositoryClass')
+          'Laraflock\Dashboard\Repositories\Auth\AuthRepo',
+          config('laraflock.dashboard.auth')
         );
 
-        // Bind the Permission Repository Interface
+        // Bind the Permission Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface',
-          config('laraflock.dashboard.permissionRepositoryClass')
+          'Laraflock\Dashboard\Repositories\Permission\PermissionRepo',
+          config('laraflock.dashboard.permission')
         );
 
-        // Bind the Role Repository Interface
+        // Bind the Role Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface',
-          config('laraflock.dashboard.roleRepositoryClass')
+          'Laraflock\Dashboard\Repositories\Role\RoleRepo',
+          config('laraflock.dashboard.role')
         );
 
-        // Bind the User Repository Interface
+        // Bind the User Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\User\UserRepositoryInterface',
-          config('laraflock.dashboard.userRepositoryClass')
+          'Laraflock\Dashboard\Repositories\User\UserRepo',
+          config('laraflock.dashboard.user')
         );
 
-        // Bind the Module Repository Interface
+        // Bind the Module Repo Interface
         $this->app->singleton(
-            'Laraflock\Dashboard\Repositories\Module\ModuleRepositoryInterface',
-            config('laraflock.dashboard.moduleRepositoryClass')
+            'Laraflock\Dashboard\Repositories\Module\ModuleRepo',
+            config('laraflock.dashboard.module')
         );
     }
 

@@ -8,9 +8,9 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\User;
+namespace Laraflock\Dashboard\Contracts;
 
-interface UserRepositoryInterface
+interface UserRepo
 {
     /**
      * Return all users.

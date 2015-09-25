@@ -8,12 +8,12 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\Base;
+namespace Laraflock\Dashboard\Traits;
 
 use Illuminate\Support\Facades\Validator;
 use Laraflock\Dashboard\Exceptions\FormValidationException;
 
-class BaseRepository
+trait ValidateTrait
 {
     /**
      * Global rules to use for validation.
@@ -34,7 +34,7 @@ class BaseRepository
         $validator = Validator::make($data, $this->rules);
 
         if ($validator->fails()) {
-            throw new FormValidationException(trans('dashboard::dashboard.errors.form.validation'), $validator);
+            throw new FormValidationException('Fix errors in the form below.', $validator);
         }
     }
 }

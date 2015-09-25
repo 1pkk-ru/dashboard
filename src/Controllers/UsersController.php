@@ -26,7 +26,7 @@ class UsersController extends BaseDashboardController
      */
     public function index()
     {
-        $users = $this->userRepositoryInterface->getAllWith('roles');
+        $users = $this->userRepo->getAllWith('roles');
 
         return $this->view('users.index')
                     ->with(['users' => $users]);
@@ -39,7 +39,7 @@ class UsersController extends BaseDashboardController
      */
     public function create()
     {
-        $roles = $this->roleRepositoryInterface->getAll()
+        $roles = $this->roleRepo->getAll()
                                                ->lists('name', 'slug');
 
         return $this->view('users.create')
@@ -56,7 +56,7 @@ class UsersController extends BaseDashboardController
     public function store(Request $request)
     {
         try {
-            $this->userRepositoryInterface->create($request->all());
+            $this->userRepo->create($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -80,7 +80,7 @@ class UsersController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$user = $this->userRepositoryInterface->getByIdWith($id, 'roles')) {
+        if (!$user = $this->userRepo->getByIdWith($id, 'roles')) {
             Flash::error(trans('dashboard::dashboard.errors.user.found'));
 
             return redirect()->route('users.index');
@@ -96,7 +96,7 @@ class UsersController extends BaseDashboardController
         $currentRoles->sortBy('name');
         $currentRoles = implode(', ', $currentRoles->toArray());
 
-        $roles = $this->roleRepositoryInterface->getAll()
+        $roles = $this->roleRepo->getAll()
                                                ->lists('name', 'slug');
 
         return $this->view('users.edit')
@@ -114,7 +114,7 @@ class UsersController extends BaseDashboardController
     public function update(Request $request, $id)
     {
         try {
-            $this->userRepositoryInterface->update($request->all(), $id);
+            $this->userRepo->update($request->all(), $id);
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -143,7 +143,7 @@ class UsersController extends BaseDashboardController
     public function delete($id)
     {
         try {
-            $this->userRepositoryInterface->delete($id);
+            $this->userRepo->delete($id);
         } catch (UsersException $e) {
             Flash::error($e->getMessage());
 

@@ -15,25 +15,25 @@ use Laracasts\Flash\Flash;
 use Laraflock\Dashboard\Exceptions\AuthenticationException;
 use Laraflock\Dashboard\Exceptions\FormValidationException;
 use Laraflock\Dashboard\Exceptions\RolesException;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface;
+use Laraflock\Dashboard\Repositories\Auth\AuthRepo;
 
 class AuthController extends BaseDashboardController
 {
     /**
      * Auth interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface
+     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
      */
-    protected $authRepositoryInterface;
+    protected $authRepo;
 
     /**
      * The constructor.
      *
-     * @param \Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface $authRepositoryInterface
+     * @param \Laraflock\Dashboard\Repositories\Auth\AuthRepo $authRepo
      */
-    public function __construct(AuthRepositoryInterface $authRepositoryInterface)
+    public function __construct(AuthRepo $authRepo)
     {
-        $this->authRepositoryInterface = $authRepositoryInterface;
+        $this->authRepo = $authRepo;
 
         $viewNamespace = config('laraflock.dashboard.viewNamespace');
 
@@ -60,7 +60,7 @@ class AuthController extends BaseDashboardController
     public function authentication(Request $request)
     {
         try {
-            $this->authRepositoryInterface->authenticate($request->all());
+            $this->authRepo->authenticate($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -108,7 +108,7 @@ class AuthController extends BaseDashboardController
         }
 
         try {
-            $this->authRepositoryInterface->register($request->all());
+            $this->authRepo->register($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -177,7 +177,7 @@ class AuthController extends BaseDashboardController
         }
 
         try {
-            $this->authRepositoryInterface->activate($request->all());
+            $this->authRepo->activate($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -215,7 +215,7 @@ class AuthController extends BaseDashboardController
      */
     public function logout()
     {
-        $this->authRepositoryInterface->logout();
+        $this->authRepo->logout();
 
         return redirect()->route('auth.login');
     }
