@@ -11,7 +11,7 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
-interface ModuleRepo
+interface ModuleRepoInterface
 {
     /**
      * Registers a dashboard module into the ecosystem

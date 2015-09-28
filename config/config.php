@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'version'                   => '1.0',
+    'version'              => '1.0',
     /*
     |--------------------------------------------------------------------------
     | Dashboard Title
@@ -23,7 +23,7 @@ return [
     |
     */
 
-    'title'                     => 'Dashboard',
+    'title'                => 'Dashboard',
     /*
     |--------------------------------------------------------------------------
     | Small Dashboard Title
@@ -34,7 +34,7 @@ return [
     |
     */
 
-    'smallTitle'                => 'Dash',
+    'smallTitle'           => 'Dash',
     /*
     |--------------------------------------------------------------------------
     | Footer Credits
@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'credits'                   => 'Laraflock',
+    'credits'              => 'Laraflock',
     /*
     |--------------------------------------------------------------------------
     | Default Role on User Creation
@@ -58,7 +58,7 @@ return [
     |
     */
 
-    'defaultRole'               => 'registered',
+    'defaultRole'          => 'registered',
     /*
     |--------------------------------------------------------------------------
     | User Registration
@@ -72,7 +72,7 @@ return [
     |
     */
 
-    'registration'              => false,
+    'registration'         => false,
     /*
     |--------------------------------------------------------------------------
     | User Activations
@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'activations'               => false,
+    'activations'          => false,
     /*
     |--------------------------------------------------------------------------
     | Package routes
@@ -99,7 +99,7 @@ return [
     |
     */
 
-    'routes'                    => true,
+    'routes'               => true,
     /*
     |--------------------------------------------------------------------------
     | Override the View Namespace
@@ -109,7 +109,7 @@ return [
     |
     */
 
-    'viewNamespace'             => 'dashboard',
+    'viewNamespace'        => 'dashboard',
     /*
     |--------------------------------------------------------------------------
     | Auth Repo Class
@@ -129,7 +129,7 @@ return [
     |
     */
 
-    'auth'       => 'Laraflock\Dashboard\Repositories\Auth\AuthRepo',
+    'auth'                 => 'Laraflock\Dashboard\Repositories\Auth\AuthRepo',
     /*
     |--------------------------------------------------------------------------
     | Permission Repo Class
@@ -149,7 +149,7 @@ return [
     |
     */
 
-    'permission' => 'Laraflock\Dashboard\Repositories\Permission\PermissionRepo',
+    'permission'           => 'Laraflock\Dashboard\Repositories\Permission\PermissionRepo',
     /*
     |--------------------------------------------------------------------------
     | Role Repo Class
@@ -169,7 +169,7 @@ return [
     |
     */
 
-    'role'       => 'Laraflock\Dashboard\Repositories\Role\RoleRepo',
+    'role'                 => 'Laraflock\Dashboard\Repositories\Role\RoleRepo',
     /*
     |--------------------------------------------------------------------------
     | User Repo Class
@@ -189,8 +189,7 @@ return [
     |
     */
 
-    'user'       => 'Laraflock\Dashboard\Repositories\UserRepo',
-
+    'user'                 => 'Laraflock\Dashboard\Repositories\UserRepo',
     /*
     |--------------------------------------------------------------------------
     | Module Repo Class
@@ -209,8 +208,21 @@ return [
     | Module Repo Interface: Laraflock\Dashboard\Repositories\Module\ModuleRepo
     |
      */
-    'module'     => 'Laraflock\Dashboard\Repositories\ModuleRepo',
-
+    'module'               => 'Laraflock\Dashboard\Repositories\ModuleRepo',
+    /*
+    |--------------------------------------------------------------------------
+    | System Email Address
+    |--------------------------------------------------------------------------
+    |
+     */
+    'system_email_address' => 'email@domain.com',
+    /*
+    |--------------------------------------------------------------------------
+    | System Email From Name
+    |--------------------------------------------------------------------------
+    |
+     */
+    'system_email_name'    => 'Laraflock Dashboard',
     /*
     |--------------------------------------------------------------------------
     | AdminLTE Theme
@@ -236,5 +248,5 @@ return [
     |
     */
 
-    'theme'                     => 'skin-blue',
+    'theme'                => 'skin-blue',
 ];

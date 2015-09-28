@@ -10,53 +10,53 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
-interface PermissionRepo
+interface UserRepoInterface
 {
     /**
-     * Return all permissions.
+     * Return all users.
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getAll();
+    public function all();
 
     /**
-     * Get permission by id.
+     * Get user by id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return mixed
      */
-    public function getById($id);
+    public function find($id);
 
     /**
-     * Create permission.
+     * Create user.
      *
      * @param array $data
-     * @param bool  $validate
      *
-     * @return static
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
+     * @return bool
+     * @throws \Laraflock\Dashboard\Exceptions\AuthenticationException
      */
-    public function create(array $data, $validate = true);
+    public function create(array $data);
 
     /**
-     * Update permission.
+     * Update user.
      *
      * @param array $data
      * @param int   $id
      * @param bool  $validate
      *
      * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\PermissionsException
+     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws \Laraflock\Dashboard\Exceptions\UsersException
      */
-    public function update(array $data, $id, $validate = true);
+    public function update($id, array $data);
 
     /**
-     * Delete permission.
+     * Delete user.
      *
      * @param int $id
      *
-     * @throws \Laraflock\Dashboard\Exceptions\PermissionsException
+     * @throws \Laraflock\Dashboard\Exceptions\UsersException
      */
     public function delete($id);
 }

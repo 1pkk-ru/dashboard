@@ -11,7 +11,7 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
-interface Module
+interface ModuleInterface
 {
     /**
      * A user-friendly name for your module

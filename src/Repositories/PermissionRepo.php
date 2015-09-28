@@ -11,11 +11,12 @@
 namespace Laraflock\Dashboard\Repositories\Permission;
 
 use Illuminate\Database\QueryException;
+use Laraflock\Dashboard\Contracts\PermissionRepoInterface;
 use Laraflock\Dashboard\Exceptions\PermissionsException;
 use Laraflock\Dashboard\Models\Permission;
 
 
-class PermissionRepo implements PermissionRepo
+class PermissionRepo implements PermissionRepoInterface
 {
     /**
      * Permission instance.
@@ -37,7 +38,7 @@ class PermissionRepo implements PermissionRepo
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function all()
     {
         return $this->permission->all();
     }
@@ -45,7 +46,7 @@ class PermissionRepo implements PermissionRepo
     /**
      * {@inheritDoc}
      */
-    public function getById($id)
+    public function find($id)
     {
         return $this->permission->find($id);
     }

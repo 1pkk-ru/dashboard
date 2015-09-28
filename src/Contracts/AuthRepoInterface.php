@@ -10,7 +10,7 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
-interface AuthRepo
+interface AuthInterface
 {
     /**
      * Get active user.

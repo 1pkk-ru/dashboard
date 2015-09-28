@@ -10,15 +10,16 @@
 
 namespace Laraflock\Dashboard\Repositories;
 
-use Cartalyst\Sentinel\Activations\IlluminateActivationRepo;
+use Cartalyst\Sentinel\Activations\IlluminateActivationRepository;
 use Cartalyst\Sentinel\Sentinel;
 use Cartalyst\Sentinel\Users\EloquentUser;
 use Illuminate\Database\QueryException;
+use Laraflock\Dashboard\Contracts\AuthInterface;
 use Laraflock\Dashboard\Exceptions\AuthenticationException;
 use Laraflock\Dashboard\Exceptions\RolesException;
 
 
-class AuthRepo implements AuthRepo
+class AuthRepo implements AuthInterface
 {
     /**
      * Activation interface.
