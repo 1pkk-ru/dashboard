@@ -1,5 +1,5 @@
 {{-- Extends Master Layout --}}
-@extends($viewNamespace . '::layouts.master')
+@extends($viewNamespace . '::layouts.edit')
 
 {{-- Meta Title --}}
 @section('title', trans('dashboard::dashboard.roles.edit.title'))
@@ -11,11 +11,7 @@
 @section('page-subtitle', trans('dashboard::dashboard.roles.edit.page_subtitle'))
 
 {{-- Content Section --}}
-@section('content')
-    {!! BootForm::open()->post()->action(route('roles.edit', ['id' => $role->id])) !!}
-
-    {{-- Bind Model to Form for Filling out Inputs --}}
-    {!! BootForm::bind($role) !!}
+@section('form')
 
     {{-- Role Box --}}
     <div class="box">
@@ -27,7 +23,7 @@
 
                 <div class="clearfix"></div>
                 @foreach($permissions as $permission)
-                    @if(is_array($role->permissions) && array_key_exists($permission->slug, $role->permissions))
+                    @if(is_array($model->permissions) && array_key_exists($permission->slug, $model->permissions))
                         {!! BootForm::inlineCheckbox($permission->name, "permissions[{$permission->slug}]")->check() !!}
                     @else
                         {!! BootForm::inlineCheckbox($permission->name, "permissions[{$permission->slug}]") !!}
@@ -37,7 +33,4 @@
         </div>
     </div>
 
-    {{-- Include Form Actions for Edit --}}
-    @include($viewNamespace . '::helpers.form.actions-edit')
-    {!! BootForm::close() !!}
 @stop

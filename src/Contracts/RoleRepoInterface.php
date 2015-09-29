@@ -16,6 +16,13 @@ use Laraflock\Dashboard\Exceptions\RolesException;
 interface RoleRepoInterface
 {
     /**
+     * Return column headers for index page.
+     *
+     * @return array
+     */
+    public function columns();
+
+    /**
      * Return all roles.
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]

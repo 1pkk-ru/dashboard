@@ -68,7 +68,7 @@ class BaseDashboardControllerTest extends TestCase
 
         $user = $this->auth->check();
 
-        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
+        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $user);
 
         $this->call('GET', '/dashboard');
 

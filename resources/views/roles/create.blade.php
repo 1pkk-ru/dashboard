@@ -1,5 +1,5 @@
 {{-- Extends Master Layout --}}
-@extends($viewNamespace . '::layouts.master')
+@extends($viewNamespace . '::layouts.create')
 
 {{-- Meta Title --}}
 @section('title', trans('dashboard::dashboard.roles.create.title'))
@@ -11,8 +11,7 @@
 @section('page-subtitle', trans('dashboard::dashboard.roles.create.page_subtitle'))
 
 {{-- Content Section --}}
-@section('content')
-    {!! BootForm::open()->post()->action(route('roles.index')) !!}
+@section('form')
 
     {{-- Role Box --}}
     <div class="box">
@@ -31,7 +30,4 @@
         </div>
     </div>
 
-    {{-- Include Form Actions for Create --}}
-    @include($viewNamespace . '::helpers.form.actions-create')
-    {!! BootForm::close() !!}
 @stop

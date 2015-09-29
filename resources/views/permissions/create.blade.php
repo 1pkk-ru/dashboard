@@ -11,8 +11,7 @@
 @section('page-subtitle', trans('dashboard::dashboard.permissions.create.page_subtitle'))
 
 {{-- Content Section --}}
-@section('content')
-    {!! BootForm::open()->post()->action(route('permissions.index')) !!}
+@section('form')
 
     {{-- Permission Box --}}
     <div class="box">
@@ -22,7 +21,4 @@
         </div>
     </div>
 
-    {{-- Include Form Actions for Create --}}
-    @include($viewNamespace . '::helpers.form.actions-create')
-    {!! BootForm::close() !!}
 @stop

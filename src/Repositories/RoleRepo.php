@@ -10,11 +10,11 @@
 
 namespace Laraflock\Dashboard\Repositories;
 
-use Cartalyst\Sentinel\Roles\EloquentRole;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Database\QueryException;
 use Laraflock\Dashboard\Contracts\RoleRepoInterface;
 use Laraflock\Dashboard\Exceptions\RolesException;
+use Laraflock\Dashboard\Models\Role;
 use Laraflock\Dashboard\Traits\UpdateTrait;
 use Laraflock\Dashboard\Traits\ValidateTrait;
 
@@ -25,18 +25,24 @@ class RoleRepo implements RoleRepoInterface
     use ValidateTrait;
 
     /**
-     * EloquentRole instance.
-     *
-     * @var EloquentRole
+     * {@inheritDoc}
      */
-    protected $role;
+    public function columns()
+    {
+        return [
+            'id'      => trans('dashboard::dashboard.table.id'),
+            'name'    => trans('dashboard::dashboard.table.name'),
+            'slug'    => trans('dashboard::dashboard.table.slug'),
+            'actions' => trans('dashboard::dashboard.table.actions'),
+        ];
+    }
 
     /**
      * {@inheritDoc}
      */
     public function all()
     {
-        return EloquentRole::all();
+        return Role::all();
     }
 
     /**
@@ -147,7 +153,7 @@ class RoleRepo implements RoleRepoInterface
     /**
      * Update the permissions of the model.
      *
-     * @param EloquentRole $model
+     * @param Role $model
      * @param array        $data
      */
     protected function permissions($model, array &$data)

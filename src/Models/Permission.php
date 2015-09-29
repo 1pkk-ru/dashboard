@@ -37,4 +37,24 @@ class Permission extends Model
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * Get delete route attribute.
+     *
+     * @return string
+     */
+    public function getDeleteRouteAttribute()
+    {
+        return route('permissions.delete', ['id' => $this->id]);
+    }
+
+    /**
+     * Get edit route attribute.
+     *
+     * @return string
+     */
+    public function getEditRouteAttribute()
+    {
+        return route('permissions.edit', ['id' => $this->id]);
+    }
 }

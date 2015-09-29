@@ -1,5 +1,5 @@
 {{-- Extends Master Layout --}}
-@extends($viewNamespace . '::layouts.master')
+@extends($viewNamespace . '::layouts.create')
 
 {{-- Meta Title --}}
 @section('title', trans('dashboard::dashboard.users.create.title'))
@@ -11,8 +11,7 @@
 @section('page-subtitle', trans('dashboard::dashboard.users.create.page_subtitle'))
 
 {{-- Content Section --}}
-@section('content')
-    {!! BootForm::open()->post()->action(route('users.index')) !!}
+@section('form')
 
     {{-- User Box --}}
     <div class="box">
@@ -26,7 +25,4 @@
         </div>
     </div>
 
-    {{-- Include Form Actions for Create --}}
-    @include($viewNamespace . '::helpers.form.actions-create')
-    {!! BootForm::close() !!}
 @stop

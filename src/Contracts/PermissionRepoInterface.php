@@ -16,6 +16,13 @@ use Laraflock\Dashboard\Exceptions\PermissionsException;
 interface PermissionRepoInterface
 {
     /**
+     * Return column headers for index page.
+     *
+     * @return array
+     */
+    public function columns();
+
+    /**
      * Return all permissions.
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]

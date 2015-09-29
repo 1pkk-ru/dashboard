@@ -18,6 +18,13 @@ use Laraflock\Dashboard\Exceptions\UsersException;
 interface UserRepoInterface
 {
     /**
+     * Return column headers for index page.
+     *
+     * @return array
+     */
+    public function columns();
+
+    /**
      * Return all users.
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]

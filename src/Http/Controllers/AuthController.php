@@ -8,7 +8,7 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Controllers;
+namespace Laraflock\Dashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;

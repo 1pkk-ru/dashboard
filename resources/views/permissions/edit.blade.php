@@ -1,5 +1,5 @@
 {{-- Extends Master Layout --}}
-@extends($viewNamespace . '::layouts.master')
+@extends($viewNamespace . '::layouts.edit')
 
 {{-- Meta Title --}}
 @section('title', trans('dashboard::dashboard.permissions.edit.title'))
@@ -11,11 +11,7 @@
 @section('page-subtitle', trans('dashboard::dashboard.permissions.edit.page_subtitle'))
 
 {{-- Content Section --}}
-@section('content')
-    {!! BootForm::open()->post()->action(route('permissions.edit', ['id' => $permission->id])) !!}
-
-    {{-- Bind Model to Form for Filling out Inputs --}}
-    {!! BootForm::bind($permission) !!}
+@section('form')
 
     {{-- Permission Box --}}
     <div class="box">
@@ -25,7 +21,4 @@
         </div>
     </div>
 
-    {{-- Include Form Actions for Edit --}}
-    @include($viewNamespace . '::helpers.form.actions-edit')
-    {!! BootForm::close() !!}
 @stop

@@ -8,7 +8,7 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Controllers;
+namespace Laraflock\Dashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,9 +25,10 @@ class PermissionsController extends BaseDashboardController
      */
     public function index()
     {
-        $permissions = $this->permission->all();
+        $columns = $this->permission->columns();
+        $models = $this->permission->all();
 
-        return $this->view('permissions.index')->with(['permissions' => $permissions]);
+        return $this->view('permissions.index')->with(compact('columns', 'models'));
     }
 
     /**

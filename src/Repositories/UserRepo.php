@@ -11,12 +11,12 @@
 namespace Laraflock\Dashboard\Repositories;
 
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
-use Cartalyst\Sentinel\Users\EloquentUser;
 use Laraflock\Dashboard\Exceptions\RolesException;
 use Laraflock\Dashboard\Exceptions\UsersException;
 use Laraflock\Dashboard\Contracts\AuthRepoInterface;
 use Laraflock\Dashboard\Contracts\RoleRepoInterface;
 use Laraflock\Dashboard\Contracts\UserRepoInterface;
+use Laraflock\Dashboard\Models\User;
 use Laraflock\Dashboard\Traits\UpdateTrait;
 use Laraflock\Dashboard\Traits\ValidateTrait;
 
@@ -51,9 +51,23 @@ class UserRepo implements UserRepoInterface
     /**
      * {@inheritDoc}
      */
+    public function columns()
+    {
+        return [
+            'id'         => trans('dashboard::dashboard.table.id'),
+            'first_name' => trans('dashboard::dashboard.table.first_name'),
+            'last_name'  => trans('dashboard::dashboard.table.last_name'),
+            'email'      => trans('dashboard::dashboard.table.email'),
+            'actions'    => trans('dashboard::dashboard.table.actions'),
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function all()
     {
-        return EloquentUser::with('roles')->get();
+        return User::with('roles')->get();
     }
 
     /**
@@ -61,7 +75,7 @@ class UserRepo implements UserRepoInterface
      */
     public function find($id)
     {
-        return EloquentUser::with('roles')->where('id', $id)->first();
+        return User::with('roles')->where('id', $id)->first();
     }
 
     /**

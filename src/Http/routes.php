@@ -3,7 +3,7 @@
 /**
  * Authentication
  */
-$this->app['router']->group(['prefix' => 'auth', 'as' => 'auth.', 'namespace' => 'Laraflock\Dashboard\Controllers'], function () {
+$this->app['router']->group(['prefix' => 'auth', 'as' => 'auth.', 'namespace' => 'Laraflock\Dashboard\Http\Controllers'], function () {
     $this->app['router']->get('login', ['as' => 'login', 'uses' => 'AuthController@login']);
     $this->app['router']->post('login', ['uses' => 'AuthController@authentication']);
     $this->app['router']->get('logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
@@ -19,12 +19,12 @@ $this->app['router']->group(['prefix' => 'auth', 'as' => 'auth.', 'namespace' =>
 /**
  * Dashboard Index
  */
-$this->app['router']->get('dashboard', ['as' => 'dashboard.index', 'uses' => 'Laraflock\Dashboard\Controllers\DashboardController@dashboard', 'middleware' => ['user', 'roles:administrator']]);
+$this->app['router']->get('dashboard', ['as' => 'dashboard.index', 'uses' => 'Laraflock\Dashboard\Http\Controllers\DashboardController@dashboard', 'middleware' => ['user', 'roles:administrator']]);
 
 /**
  * Roles management.
  */
-$this->app['router']->group(['prefix' => 'dashboard/roles', 'as' => 'roles.', 'namespace' => 'Laraflock\Dashboard\Controllers', 'middleware' => ['user', 'roles:administrator']], function () {
+$this->app['router']->group(['prefix' => 'dashboard/roles', 'as' => 'roles.', 'namespace' => 'Laraflock\Dashboard\Http\Controllers', 'middleware' => ['user', 'roles:administrator']], function () {
     $this->app['router']->get('/', ['as' => 'index', 'uses' => 'RolesController@index']);
     $this->app['router']->get('create', ['as' => 'create', 'uses' => 'RolesController@create']);
     $this->app['router']->post('/', ['uses' => 'RolesController@store']);
@@ -36,7 +36,7 @@ $this->app['router']->group(['prefix' => 'dashboard/roles', 'as' => 'roles.', 'n
 /**
  * Users management.
  */
-$this->app['router']->group(['prefix' => 'dashboard/users', 'as' => 'users.', 'namespace' => 'Laraflock\Dashboard\Controllers', 'middleware' => ['user', 'roles:administrator']], function () {
+$this->app['router']->group(['prefix' => 'dashboard/users', 'as' => 'users.', 'namespace' => 'Laraflock\Dashboard\Http\Controllers', 'middleware' => ['user', 'roles:administrator']], function () {
     $this->app['router']->get('/', ['as' => 'index', 'uses' => 'UsersController@index']);
     $this->app['router']->get('create', ['as' => 'create', 'uses' => 'UsersController@create']);
     $this->app['router']->post('/', ['uses' => 'UsersController@store']);
@@ -48,7 +48,7 @@ $this->app['router']->group(['prefix' => 'dashboard/users', 'as' => 'users.', 'n
 /**
  * Permissions management.
  */
-$this->app['router']->group(['prefix' => 'dashboard/permissions', 'as' => 'permissions.', 'namespace' => 'Laraflock\Dashboard\Controllers', 'middleware' => ['user', 'roles:administrator']], function () {
+$this->app['router']->group(['prefix' => 'dashboard/permissions', 'as' => 'permissions.', 'namespace' => 'Laraflock\Dashboard\Http\Controllers', 'middleware' => ['user', 'roles:administrator']], function () {
     $this->app['router']->get('/', ['as' => 'index', 'uses' => 'PermissionsController@index']);
     $this->app['router']->get('create', ['as' => 'create', 'uses' => 'PermissionsController@create']);
     $this->app['router']->post('/', ['uses' => 'PermissionsController@store']);

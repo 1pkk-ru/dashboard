@@ -25,6 +25,19 @@ class PermissionRepo implements PermissionRepoInterface
     /**
      * {@inheritDoc}
      */
+    public function columns()
+    {
+        return [
+            'id'      => trans('dashboard::dashboard.table.id'),
+            'name'    => trans('dashboard::dashboard.table.name'),
+            'slug'    => trans('dashboard::dashboard.table.slug'),
+            'actions' => trans('dashboard::dashboard.table.actions'),
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function all()
     {
         return Permission::all();
@@ -45,8 +58,8 @@ class PermissionRepo implements PermissionRepoInterface
     {
         // Setup validation rules.
         $this->rules = [
-          'name' => 'required',
-          'slug' => 'required|unique:permissions',
+            'name' => 'required',
+            'slug' => 'required|unique:permissions',
         ];
 
         // Run validation.
@@ -75,8 +88,8 @@ class PermissionRepo implements PermissionRepoInterface
 
         // Setup validation rules.
         $this->rules = [
-          'name' => 'required',
-          'slug' => 'required|alpha_dash',
+            'name' => 'required',
+            'slug' => 'required|alpha_dash',
         ];
 
         // Slug validation rules conditional.

@@ -43,7 +43,7 @@ class AuthRepositoryTest extends TestCase
         $this->auth->login($user);
         $activeUser = $this->auth->getActiveUser();
 
-        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $activeUser);
+        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $activeUser);
     }
 
     public function testCheckTrue()
@@ -57,7 +57,7 @@ class AuthRepositoryTest extends TestCase
         $this->auth->login($user);
         $check = $this->auth->check();
 
-        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $check);
+        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $check);
     }
 
     public function testCheckFalse()
@@ -74,7 +74,7 @@ class AuthRepositoryTest extends TestCase
 
         $user = $this->auth->authenticate($userData);
 
-        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
+        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $user);
     }
 
     public function testAuthenticateFormValidationException()
@@ -244,7 +244,7 @@ class AuthRepositoryTest extends TestCase
     {
         $user = $this->auth->findByCredentials(['login' => 'admin@change.me']);
 
-        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
+        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $user);
     }
 
     public function login()
@@ -257,7 +257,7 @@ class AuthRepositoryTest extends TestCase
         $user      = $this->auth->authenticate($userData);
         $loginUser = $this->auth->login($user);
 
-        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $loginUser);
+        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $loginUser);
     }
 
     public function logout()

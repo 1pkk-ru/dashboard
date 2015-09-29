@@ -1,5 +1,5 @@
 {{-- Extends Master Layout --}}
-@extends($viewNamespace . '::layouts.master')
+@extends($viewNamespace . '::layouts.edit')
 
 {{-- Meta Title --}}
 @section('title', trans('dashboard::dashboard.users.edit.title'))
@@ -11,11 +11,7 @@
 @section('page-subtitle', trans('dashboard::dashboard.users.edit.page_subtitle'))
 
 {{-- Content Section --}}
-@section('content')
-    {!! BootForm::open()->post()->action(route('users.edit', ['id' => $user->id])) !!}
-
-    {{-- Bind Model to Form for Filling out Inputs --}}
-    {!! BootForm::bind($user) !!}
+@section('form')
 
     {{-- User Box --}}
     <div class="box">
@@ -31,7 +27,4 @@
         </div>
     </div>
 
-    {{-- Include Form Actions for Edit --}}
-    @include($viewNamespace . '::helpers.form.actions-edit')
-    {!! BootForm::close() !!}
 @stop
