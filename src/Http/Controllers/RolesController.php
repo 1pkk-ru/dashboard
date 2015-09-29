@@ -41,9 +41,10 @@ class RolesController extends BaseDashboardController
      */
     public function index()
     {
-        $roles = $this->role->all();
+        $columns = $this->role->columns();
+        $models = $this->role->all();
 
-        return $this->view('roles.index')->with(['roles' => $roles]);
+        return $this->view('roles.index', compact('columns', 'models'));
     }
 
     /**
@@ -53,7 +54,10 @@ class RolesController extends BaseDashboardController
      */
     public function create()
     {
-        return $this->view('roles.create')->with(['permissions' => $this->permissions]);
+        $createRoute = route('roles.create');
+        $permissions = $this->permissions;
+
+        return $this->view('roles.create', compact('createRoute', 'permissions'));
     }
 
     /**
@@ -90,13 +94,15 @@ class RolesController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$role = $this->role->find($id)) {
+        if (!$model = $this->role->find($id)) {
             Flash::error(trans('dashboard::dashboard.errors.role.found'));
 
             return redirect()->route('roles.index');
         }
 
-        return $this->view('roles.edit')->with(['role' => $role, 'permissions' => $this->permissions]);
+        $permissions = $this->permissions;
+
+        return $this->view('roles.edit', compact('model', 'permissions'));
     }
 
     /**

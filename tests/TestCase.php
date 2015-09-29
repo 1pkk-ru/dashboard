@@ -8,6 +8,7 @@
  * @link        https://github.com/laraflock
  */
 
+use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase as Base;
 use Laraflock\Dashboard\Providers\DashboardServiceProvider;
@@ -73,10 +74,10 @@ class TestCase extends Base
         // Run migrations.
         $this->artisan('migrate');
 
-        $this->auth       = app()->make('Laraflock\Dashboard\Contracts\AuthRepoInterface');
+        $this->auth = app()->make('Laraflock\Dashboard\Contracts\AuthRepoInterface');
         $this->permission = app()->make('Laraflock\Dashboard\Contracts\PermissionRepoInterface');
-        $this->role       = app()->make('Laraflock\Dashboard\Contracts\RoleRepoInterface');
-        $this->user       = app()->make('Laraflock\Dashboard\Contracts\UserRepoInterface');
+        $this->role = app()->make('Laraflock\Dashboard\Contracts\RoleRepoInterface');
+        $this->user = app()->make('Laraflock\Dashboard\Contracts\UserRepoInterface');
     }
 
     public function tearDown()

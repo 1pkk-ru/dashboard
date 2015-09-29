@@ -11,7 +11,10 @@
 @section('page-subtitle', trans('dashboard::dashboard.users.create.page_subtitle'))
 
 {{-- Content Section --}}
-@section('form')
+@section('content')
+
+    {{-- Open Form --}}
+    {!! BootForm::open()->post()->action($createRoute)->multipart() !!}
 
     {{-- User Box --}}
     <div class="box">
@@ -24,5 +27,11 @@
             {!! BootForm::select(trans('dashboard::dashboard.form.role'), 'role', $roles) !!}
         </div>
     </div>
+
+    {{-- Include Form Actions for Create --}}
+    @include($viewNamespace . '::helpers.form.actions-create')
+
+    {{-- Close Form --}}
+    {!! BootForm::close() !!}
 
 @stop

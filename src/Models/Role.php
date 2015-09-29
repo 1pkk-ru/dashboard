@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @package     Dashboard
+ * @author      Ian Olson <me@ianolson.io>
+ * @license     MIT
+ * @copyright   2015, Laraflock
+ * @link        https://github.com/laraflock
+ */
+
 namespace Laraflock\Dashboard\Models;
 
 use Cartalyst\Sentinel\Roles\EloquentRole;

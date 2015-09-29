@@ -11,7 +11,13 @@
 @section('page-subtitle', trans('dashboard::dashboard.roles.edit.page_subtitle'))
 
 {{-- Content Section --}}
-@section('form')
+@section('content')
+
+    {{-- Open Form --}}
+    {!! BootForm::open()->post()->action($model->edit_route)->multipart() !!}
+
+    {{-- Bind Model to Form for Filling out Inputs --}}
+    {!! BootForm::bind($model) !!}
 
     {{-- Role Box --}}
     <div class="box">
@@ -32,5 +38,11 @@
             </div>
         </div>
     </div>
+
+    {{-- Include Form Actions for Edit --}}
+    @include($viewNamespace . '::helpers.form.actions-edit')
+
+    {{-- Close Form --}}
+    {!! BootForm::close() !!}
 
 @stop

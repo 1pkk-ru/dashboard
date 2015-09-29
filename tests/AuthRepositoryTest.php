@@ -7,7 +7,6 @@
  * @copyright   2015, Laraflock
  * @link        https://github.com/laraflock
  */
-
 class AuthRepositoryTest extends TestCase
 {
     public function setUp()
@@ -19,45 +18,46 @@ class AuthRepositoryTest extends TestCase
     protected function setupData()
     {
         $roleData = [
-          'name' => 'Registered',
-          'slug' => 'registered',
+            'name' => 'Registered',
+            'slug' => 'registered',
         ];
 
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'                 => 'admin@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->role->create($roleData);
-        $this->auth->registerAndActivate($userData, false);
+        $this->auth->registerAndActivate($userData);
     }
 
     public function testGetActiveUser()
     {
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'    => 'admin@change.me',
+            'password' => 'test',
         ];
 
         $user = $this->auth->authenticate($userData);
         $this->auth->login($user);
         $activeUser = $this->auth->getActiveUser();
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $activeUser);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $activeUser);
     }
 
     public function testCheckTrue()
     {
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'    => 'admin@change.me',
+            'password' => 'test',
         ];
 
         $user = $this->auth->authenticate($userData);
         $this->auth->login($user);
         $check = $this->auth->check();
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $check);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $check);
     }
 
     public function testCheckFalse()
@@ -68,13 +68,13 @@ class AuthRepositoryTest extends TestCase
     public function testAuthenticate()
     {
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'    => 'admin@change.me',
+            'password' => 'test',
         ];
 
         $user = $this->auth->authenticate($userData);
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $user);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
     }
 
     public function testAuthenticateFormValidationException()
@@ -82,8 +82,8 @@ class AuthRepositoryTest extends TestCase
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\FormValidationException');
 
         $userData = [
-          'email'    => 'admin',
-          'password' => 'test',
+            'email'    => 'admin',
+            'password' => 'test',
         ];
 
         $this->auth->authenticate($userData);
@@ -94,8 +94,8 @@ class AuthRepositoryTest extends TestCase
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\AuthenticationException');
 
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test2',
+            'email'    => 'admin@change.me',
+            'password' => 'test2',
         ];
 
         $this->auth->authenticate($userData);
@@ -106,27 +106,29 @@ class AuthRepositoryTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $activation = $this->auth->register($data, false);
+        $activation = $this->auth->register($data);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Activations\EloquentActivation::class, $activation);
     }
 
-    public function testRegisterAuthenticationException()
+    public function testRegisterFormValidationException()
     {
-        $this->setExpectedException('Laraflock\Dashboard\Exceptions\AuthenticationException');
+        $this->setExpectedException('Laraflock\Dashboard\Exceptions\FormValidationException');
 
         $data = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $this->auth->register($data, false);
+        $this->auth->register($data);
     }
 
     public function testRegisterRolesException()
@@ -136,23 +138,25 @@ class AuthRepositoryTest extends TestCase
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\RolesException');
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'administrator',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'administrator',
         ];
 
-        $this->auth->register($data, false);
+        $this->auth->register($data);
     }
 
     public function testRegisterAndActivate()
     {
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $user = $this->auth->register($data, false);
+        $user = $this->auth->register($data);
 
         $this->assertTrue($user);
     }
@@ -162,25 +166,13 @@ class AuthRepositoryTest extends TestCase
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\FormValidationException');
 
         $data = [
-          'email'    => 'admin',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $this->auth->registerAndActivate($data, true);
-    }
-
-    public function testRegisterAndActivateAuthenticationException()
-    {
-        $this->setExpectedException('Laraflock\Dashboard\Exceptions\AuthenticationException');
-
-        $data = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
-        ];
-
-        $this->auth->registerAndActivate($data, false);
+        $this->auth->registerAndActivate($data);
     }
 
     public function testRegisterAndActivateRolesException()
@@ -188,12 +180,13 @@ class AuthRepositoryTest extends TestCase
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\RolesException');
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'administrator',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'administrator',
         ];
 
-        $this->auth->registerAndActivate($data, false);
+        $this->auth->registerAndActivate($data);
     }
 
     public function testActivate()
@@ -201,19 +194,20 @@ class AuthRepositoryTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $activation = $this->auth->register($data, false);
+        $activation = $this->auth->register($data);
 
         $activationData = [
-          'email'           => $data['email'],
-          'activation_code' => $activation->code,
+            'email'           => $data['email'],
+            'activation_code' => $activation->code,
         ];
 
-        $activated = $this->auth->activate($activationData, false);
+        $activated = $this->auth->activate($activationData);
 
         $this->assertTrue($activated);
     }
@@ -225,46 +219,47 @@ class AuthRepositoryTest extends TestCase
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\AuthenticationException');
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $this->auth->register($data, false);
+        $this->auth->register($data);
 
         $activationData = [
-          'email'           => $data['email'],
-          'activation_code' => 'notthecode',
+            'email'           => $data['email'],
+            'activation_code' => 'notthecode',
         ];
 
-        $this->auth->activate($activationData, false);
+        $this->auth->activate($activationData);
     }
 
     public function testFindUserByCredentials()
     {
         $user = $this->auth->findByCredentials(['login' => 'admin@change.me']);
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $user);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
     }
 
     public function login()
     {
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'    => 'admin@change.me',
+            'password' => 'test',
         ];
 
-        $user      = $this->auth->authenticate($userData);
+        $user = $this->auth->authenticate($userData);
         $loginUser = $this->auth->login($user);
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $loginUser);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $loginUser);
     }
 
     public function logout()
     {
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'    => 'admin@change.me',
+            'password' => 'test',
         ];
 
         $user = $this->auth->authenticate($userData);

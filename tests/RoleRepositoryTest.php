@@ -37,7 +37,7 @@ class RoleRepositoryTest extends TestCase
     {
         $role = $this->role->find(1);
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\Role::class, $role);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Roles\EloquentRole::class, $role);
     }
 
     public function testGetByIdNull()
@@ -56,7 +56,7 @@ class RoleRepositoryTest extends TestCase
 
         $role = $this->role->create($data);
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\Role::class, $role);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Roles\EloquentRole::class, $role);
     }
 
     public function testCreateFormValidationException()
@@ -80,7 +80,7 @@ class RoleRepositoryTest extends TestCase
 
         $role = $this->role->update(1, $data);
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\Role::class, $role);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Roles\EloquentRole::class, $role);
     }
 
     public function testUpdateRolesException()

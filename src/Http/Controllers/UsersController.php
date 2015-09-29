@@ -42,9 +42,10 @@ class UsersController extends BaseDashboardController
      */
     public function index()
     {
-        $users = $this->user->all();
+        $columns = $this->user->columns();
+        $models = $this->user->all();
 
-        return $this->view('users.index')->with(['users' => $users]);
+        return $this->view('users.index', compact('columns', 'models'));
     }
 
     /**
@@ -54,7 +55,10 @@ class UsersController extends BaseDashboardController
      */
     public function create()
     {
-        return $this->view('users.create')->with('roles', $this->roles);
+        $createRoute = route('users.create');
+        $roles = $this->roles;
+
+        return $this->view('users.create', compact('createRoute', 'roles'));
     }
 
     /**
@@ -91,13 +95,13 @@ class UsersController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$user = $this->user->find($id)) {
+        if (!$model = $this->user->find($id)) {
             Flash::error(trans('dashboard::dashboard.errors.user.found'));
 
             return redirect()->route('users.index');
         }
 
-        $currentRoles = $user->getRoles()->lists('name');
+        $currentRoles = $model->getRoles()->lists('name');
 
         if (empty($currentRoles)) {
             $currentRoles = new Collection(['name' => 'Not Available']);
@@ -106,10 +110,9 @@ class UsersController extends BaseDashboardController
         $currentRoles->sortBy('name');
         $currentRoles = implode(', ', $currentRoles->toArray());
 
-        $roles = $this->role->all()->lists('name', 'slug');
+        $roles = $this->roles;
 
-        return $this->view('users.edit')
-            ->with(['user' => $user, 'currentRoles' => $currentRoles, 'roles' => $roles]);
+        return $this->view('users.edit', compact('model', 'currentRoles', 'roles'));
     }
 
     /**

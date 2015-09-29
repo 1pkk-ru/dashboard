@@ -8,6 +8,7 @@
  * @link        https://github.com/laraflock
  */
 
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
@@ -25,44 +26,45 @@ class AuthControllerTest extends TestCase
     protected function setupData()
     {
         $roleData = [
-          'name' => 'Registered',
-          'slug' => 'registered',
+            'name' => 'Registered',
+            'slug' => 'registered',
         ];
 
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'                 => 'admin@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->role->create($roleData);
-        $this->auth->registerAndActivate($userData, false);
+        $this->auth->registerAndActivate($userData);
     }
 
     public function testLoginRoute()
     {
         $this->visit('/auth/login')
-             ->assertResponseOk();
+            ->assertResponseOk();
     }
 
     public function testAuthentication()
     {
         $data = [
-          'email'    => 'admin@change.me',
-          'password' => 'test'
+            'email'    => 'admin@change.me',
+            'password' => 'test'
         ];
 
         $this->call('POST', '/auth/login', $data);
 
         $user = $this->auth->check();
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $user);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
     }
 
     public function testAuthenticationFormValidationException()
     {
         $data = [
-          'email'    => '',
-          'password' => ''
+            'email'    => '',
+            'password' => ''
         ];
 
         $this->call('POST', '/auth/login', $data);
@@ -74,8 +76,8 @@ class AuthControllerTest extends TestCase
     public function testAuthenticationAuthenticationException()
     {
         $data = [
-          'email'    => 'admin@change.me',
-          'password' => 'test2'
+            'email'    => 'admin@change.me',
+            'password' => 'test2'
         ];
 
         $this->call('POST', '/auth/login', $data);
@@ -87,7 +89,7 @@ class AuthControllerTest extends TestCase
     public function testRegisterRouteRedirect()
     {
         $this->visit('/auth/register')
-             ->seePageIs('/auth/login');
+            ->seePageIs('/auth/login');
 
         $this->assertEquals('Registration is not active. Please login.', session('flash_notification.message'));
         $this->assertEquals('danger', session('flash_notification.level'));
@@ -105,7 +107,7 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.registration' => true]);
 
         $this->visit('/auth/register')
-             ->assertResponseOk();
+            ->assertResponseOk();
     }
 
     public function testRegistration()
@@ -113,9 +115,9 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.registration' => true]);
 
         $data = [
-          'email'                 => 'admin2@change.me',
-          'password'              => 'test',
-          'password_confirmation' => 'test',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->call('POST', '/auth/register', $data);
@@ -129,9 +131,9 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.registration' => true]);
 
         $data = [
-          'email'                 => '',
-          'password'              => '',
-          'password_confirmation' => '',
+            'email'                 => '',
+            'password'              => '',
+            'password_confirmation' => '',
         ];
 
         $this->call('POST', '/auth/register', $data);
@@ -146,9 +148,9 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.defaultRole' => 'fake']);
 
         $data = [
-          'email'                 => 'admin2@change.me',
-          'password'              => 'test',
-          'password_confirmation' => 'test',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->call('POST', '/auth/register', $data);
@@ -163,21 +165,22 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $data = [
-          'email'                 => 'admin2@change.me',
-          'password'              => 'test',
-          'password_confirmation' => 'test',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->call('POST', '/auth/register', $data);
 
-        $this->assertEquals('Account created. Activation needed, please check your email.', session('flash_notification.message'));
+        $this->assertEquals('Account created. Activation needed, please check your email.',
+            session('flash_notification.message'));
         $this->assertEquals('success', session('flash_notification.level'));
     }
 
     public function testActivateRouteRedirect()
     {
         $this->visit('/auth/activate')
-             ->seePageIs('/auth/login');
+            ->seePageIs('/auth/login');
 
         $this->assertEquals('Activations are not active. Please login.', session('flash_notification.message'));
         $this->assertEquals('danger', session('flash_notification.level'));
@@ -195,7 +198,7 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $this->visit('/auth/register')
-             ->assertResponseOk();
+            ->assertResponseOk();
     }
 
     public function testActivateRouteWithParameters()
@@ -203,7 +206,7 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $this->visit('/auth/register?email=admin2@change.me&code=test')
-             ->assertResponseOk();
+            ->assertResponseOk();
     }
 
     public function testUserActivation()
@@ -212,16 +215,17 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $activation = $this->auth->register($data, false);
+        $activation = $this->auth->register($data);
 
         $activationData = [
-          'email'           => $data['email'],
-          'activation_code' => $activation->code,
+            'email'           => $data['email'],
+            'activation_code' => $activation->code,
         ];
 
         $this->call('POST', '/auth/activate', $activationData);
@@ -247,16 +251,17 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $activation = $this->auth->register($data, false);
+        $activation = $this->auth->register($data);
 
         $activationData = [
-          'email'           => $data['email'],
-          'activation_code' => $activation->code,
+            'email'           => $data['email'],
+            'activation_code' => $activation->code,
         ];
 
         $this->call('POST', '/auth/activate', $activationData);
@@ -273,16 +278,17 @@ class AuthControllerTest extends TestCase
         config(['laraflock.dashboard.activations' => true]);
 
         $data = [
-          'email'    => 'admin2@change.me',
-          'password' => 'test',
-          'role'     => 'registered',
+            'email'                 => 'admin2@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
+            'role'                  => 'registered',
         ];
 
-        $this->auth->register($data, false);
+        $this->auth->register($data);
 
         $activationData = [
-          'email'           => $data['email'],
-          'activation_code' => '11',
+            'email'           => $data['email'],
+            'activation_code' => '11',
         ];
 
         $this->call('POST', '/auth/activate', $activationData);
@@ -294,14 +300,14 @@ class AuthControllerTest extends TestCase
     public function testLogout()
     {
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'    => 'admin@change.me',
+            'password' => 'test',
         ];
 
         $user = $this->auth->authenticate($userData);
         $this->auth->login($user);
 
         $this->visit('/auth/logout')
-             ->assertResponseOk();
+            ->assertResponseOk();
     }
 }

@@ -25,13 +25,14 @@ class RolesControllerTest extends TestCase
     protected function setupData()
     {
         $roleData = [
-          'name' => 'Registered',
-          'slug' => 'registered',
+            'name' => 'Registered',
+            'slug' => 'registered',
         ];
 
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'                 => 'admin@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->role->create($roleData);
@@ -98,8 +99,8 @@ class RolesControllerTest extends TestCase
     public function testEdit()
     {
         $data = [
-          'name' => 'Registered2',
-          'slug' => 'registered',
+            'name' => 'Registered2',
+            'slug' => 'registered',
         ];
 
         $this->call('POST', '/dashboard/roles/1/edit', $data);
@@ -111,8 +112,8 @@ class RolesControllerTest extends TestCase
     public function testEditFormValidationException()
     {
         $data = [
-          'name' => 'Registered 2',
-          'slug' => 'registered 2',
+            'name' => 'Registered 2',
+            'slug' => 'registered 2',
         ];
 
         $this->call('POST', '/dashboard/roles/1/edit', $data);
@@ -124,8 +125,8 @@ class RolesControllerTest extends TestCase
     public function testEditRolesException()
     {
         $data = [
-          'name' => 'Registered',
-          'slug' => 'registered',
+            'name' => 'Registered',
+            'slug' => 'registered',
         ];
 
         $this->call('POST', '/dashboard/roles/2/edit', $data);

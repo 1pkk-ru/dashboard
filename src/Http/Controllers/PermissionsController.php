@@ -28,7 +28,7 @@ class PermissionsController extends BaseDashboardController
         $columns = $this->permission->columns();
         $models = $this->permission->all();
 
-        return $this->view('permissions.index')->with(compact('columns', 'models'));
+        return $this->view('permissions.index', compact('columns', 'models'));
     }
 
     /**
@@ -38,7 +38,9 @@ class PermissionsController extends BaseDashboardController
      */
     public function create()
     {
-        return $this->view('permissions.create');
+        $createRoute = route('permissions.create');
+
+        return $this->view('permissions.create', compact('createRoute'));
     }
 
     /**
@@ -75,13 +77,13 @@ class PermissionsController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$permission = $this->permission->find($id)) {
+        if (!$model = $this->permission->find($id)) {
             Flash::error(trans('dashboard::dashboard.errors.permission.found'));
 
             return redirect()->route('permissions.index');
         }
 
-        return $this->view('permissions.edit')->with(['permission' => $permission]);
+        return $this->view('permissions.edit', compact('model'));
     }
 
     /**

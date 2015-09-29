@@ -10,51 +10,24 @@
 
 namespace Laraflock\Dashboard\Repositories;
 
-use Cartalyst\Sentinel\Activations\IlluminateActivationRepository as Activation;
-use Cartalyst\Sentinel\Sentinel;
-use Cartalyst\Sentinel\Users\EloquentUser;
+use Cartalyst\Sentinel\Laravel\Facades\Activation;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Database\QueryException;
 use Laraflock\Dashboard\Contracts\AuthRepoInterface;
 use Laraflock\Dashboard\Exceptions\AuthenticationException;
 use Laraflock\Dashboard\Exceptions\RolesException;
 use Laraflock\Dashboard\Traits\ValidateTrait;
 
-
 class AuthRepo implements AuthRepoInterface
 {
     use ValidateTrait;
-
-    /**
-     * Activation interface.
-     *
-     * @var Activation
-     */
-    protected $activation;
-
-    /**
-     * Sentinel instance.
-     *
-     * @var Sentinel
-     */
-    protected $sentinel;
-
-    /**
-     *
-     * @param Activation $activation
-     * @param Sentinel                       $sentinel
-     */
-    public function __construct(Activation $activation, Sentinel $sentinel)
-    {
-        $this->activation = $activation;
-        $this->sentinel   = $sentinel;
-    }
 
     /**
      * {@inheritDoc}
      */
     public function getActiveUser()
     {
-        return $this->sentinel->getUser();
+        return Sentinel::getUser();
     }
 
     /**
@@ -62,7 +35,7 @@ class AuthRepo implements AuthRepoInterface
      */
     public function check()
     {
-        return $this->sentinel->check();
+        return Sentinel::check();
     }
 
     /**
@@ -70,6 +43,7 @@ class AuthRepo implements AuthRepoInterface
      */
     public function authenticate(array $data)
     {
+        // Setup validation rules.
         $this->rules = [
             'email'    => 'required|email',
             'password' => 'required',
@@ -81,9 +55,10 @@ class AuthRepo implements AuthRepoInterface
             $remember = $data['remember'];
         }
 
+        // Run validation.
         $this->validate($data);
 
-        if (!$user = $this->sentinel->authenticate($data, $remember)) {
+        if (!$user = Sentinel::authenticate($data, $remember)) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.incorrect'));
         }
 
@@ -93,17 +68,17 @@ class AuthRepo implements AuthRepoInterface
     /**
      * {@inheritDoc}
      */
-    public function register(array $data, $validate = true)
+    public function register(array $data)
     {
+        // Setup validation rules.
         $this->rules = [
-            'email'                 => 'required|unique:users',
+            'email'                 => 'required|email|unique:users',
             'password'              => 'required|confirmed',
             'password_confirmation' => 'required',
         ];
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
         if (!config('laraflock.dashboard.activations')) {
             $this->registerAndActivate($data, false);
@@ -112,12 +87,8 @@ class AuthRepo implements AuthRepoInterface
         }
 
         try {
-            $user = $this->sentinel->register($data);
+            $user = Sentinel::register($data);
         } catch (QueryException $e) {
-            throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.create'));
-        }
-
-        if (!$user instanceof EloquentUser) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.create'));
         }
 
@@ -125,14 +96,14 @@ class AuthRepo implements AuthRepoInterface
             $data['role'] = config('laraflock.dashboard.defaultRole');
         }
 
-        if (!$role = $this->sentinel->findRoleBySlug($data['role'])) {
+        if (!$role = Sentinel::findRoleBySlug($data['role'])) {
             throw new RolesException(trans('dashboard::dashboard.errors.role.found'));
         }
 
         $role->users()
             ->attach($user);
 
-        if (!$activation = $this->activation->create($user)) {
+        if (!$activation = Activation::create($user)) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.activation.create'));
         }
 
@@ -142,29 +113,25 @@ class AuthRepo implements AuthRepoInterface
     /**
      * {@inheritDoc}
      */
-    public function registerAndActivate(array $data, $validate = true)
+    public function registerAndActivate(array $data)
     {
+        // Setup validation rules.
         $this->rules = [
-            'email'                 => 'required|unique:users',
+            'email'                 => 'required|email|unique:users',
             'password'              => 'required|confirmed',
             'password_confirmation' => 'required',
         ];
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
-        try {
-            $user = $this->sentinel->registerAndActivate($data);
-        } catch (QueryException $e) {
-            throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.create'));
-        }
+        $user = Sentinel::registerAndActivate($data);
 
         if (!isset($data['role'])) {
             $data['role'] = config('laraflock.dashboard.defaultRole');
         }
 
-        if (!$role = $this->sentinel->findRoleBySlug($data['role'])) {
+        if (!$role = Sentinel::findRoleBySlug($data['role'])) {
             throw new RolesException(trans('dashboard::dashboard.errors.role.found'));
         }
 
@@ -177,20 +144,20 @@ class AuthRepo implements AuthRepoInterface
     /**
      * {@inheritDoc}
      */
-    public function activate(array $data, $validate = true)
+    public function activate(array $data)
     {
+        // Setup validation rules.
         $this->rules = [
             'email'           => 'required|email',
             'activation_code' => 'required',
         ];
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
         $user = $this->findByCredentials(['login' => $data['email']]);
 
-        if (!$this->activation->complete($user, $data['activation_code'])) {
+        if (!Activation::complete($user, $data['activation_code'])) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.activation.complete'));
         }
 
@@ -202,7 +169,7 @@ class AuthRepo implements AuthRepoInterface
      */
     public function findByCredentials(array $data)
     {
-        return $this->sentinel->findByCredentials($data);
+        return Sentinel::findByCredentials($data);
     }
 
     /**
@@ -210,7 +177,7 @@ class AuthRepo implements AuthRepoInterface
      */
     public function login($user)
     {
-        return $this->sentinel->login($user);
+        return Sentinel::login($user);
     }
 
     /**
@@ -218,6 +185,6 @@ class AuthRepo implements AuthRepoInterface
      */
     public function logout()
     {
-        return $this->sentinel->logout();
+        return Sentinel::logout();
     }
 }

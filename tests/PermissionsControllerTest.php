@@ -25,18 +25,19 @@ class PermissionsControllerTest extends TestCase
     protected function setupData()
     {
         $roleData = [
-          'name' => 'Registered',
-          'slug' => 'registered',
+            'name' => 'Registered',
+            'slug' => 'registered',
         ];
 
         $permissionData = [
-          'name' => 'Test',
-          'slug' => 'test',
+            'name' => 'Test',
+            'slug' => 'test',
         ];
 
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'                 => 'admin@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->role->create($roleData);
@@ -64,8 +65,8 @@ class PermissionsControllerTest extends TestCase
     public function testCreate()
     {
         $data = [
-          'name' => 'Create Users',
-          'slug' => 'users.create',
+            'name' => 'Create Users',
+            'slug' => 'users.create',
         ];
 
         $this->call('POST', '/dashboard/permissions', $data);
@@ -77,8 +78,8 @@ class PermissionsControllerTest extends TestCase
     public function testCreateFormValidationException()
     {
         $data = [
-          'name' => '',
-          'slug' => '',
+            'name' => '',
+            'slug' => '',
         ];
 
         $this->call('POST', '/dashboard/permissions', $data);
@@ -105,8 +106,8 @@ class PermissionsControllerTest extends TestCase
     public function testEdit()
     {
         $data = [
-          'name' => 'Test2',
-          'slug' => 'test2',
+            'name' => 'Test2',
+            'slug' => 'test2',
         ];
 
         $this->call('POST', '/dashboard/permissions/1/edit', $data);
@@ -118,8 +119,8 @@ class PermissionsControllerTest extends TestCase
     public function testEditFromValidationException()
     {
         $data = [
-          'name' => 'Test 2',
-          'slug' => 'test 2',
+            'name' => 'Test 2',
+            'slug' => 'test 2',
         ];
 
         $this->call('POST', '/dashboard/permissions/1/edit', $data);
@@ -131,8 +132,8 @@ class PermissionsControllerTest extends TestCase
     public function testEditPermissionsException()
     {
         $data = [
-          'name' => 'Test2',
-          'slug' => 'test2',
+            'name' => 'Test2',
+            'slug' => 'test2',
         ];
 
         $this->call('POST', '/dashboard/permissions/2/edit', $data);

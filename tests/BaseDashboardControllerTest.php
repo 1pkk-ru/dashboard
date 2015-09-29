@@ -26,21 +26,22 @@ class BaseDashboardControllerTest extends TestCase
         Session::start();
 
         $roleData = [
-          'name' => 'Registered',
-          'slug' => 'registered',
+            'name' => 'Registered',
+            'slug' => 'registered',
         ];
 
         $roleData2 = [
-          'name'        => 'Administrator',
-          'slug'        => 'administrator',
-          'permissions' => [
-            'admin' => "1",
-          ],
+            'name'        => 'Administrator',
+            'slug'        => 'administrator',
+            'permissions' => [
+                'admin' => "1",
+            ],
         ];
 
         $userData = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
+            'email'                 => 'admin@change.me',
+            'password'              => 'test',
+            'password_confirmation' => 'test',
         ];
 
         $this->role->create($roleData);
@@ -59,16 +60,16 @@ class BaseDashboardControllerTest extends TestCase
     public function testDashboardRouteNotInRole()
     {
         $data = [
-          'email'    => 'admin@change.me',
-          'password' => 'test',
-          '_token'   => csrf_token(),
+            'email'    => 'admin@change.me',
+            'password' => 'test',
+            '_token'   => csrf_token(),
         ];
 
         $this->call('POST', '/auth/login', $data);
 
         $user = $this->auth->check();
 
-        $this->assertInstanceOf(\Laraflock\Dashboard\Models\User::class, $user);
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
 
         $this->call('GET', '/dashboard');
 
