@@ -8,112 +8,78 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\User;
+namespace Laraflock\Dashboard\Repositories;
 
-use Cartalyst\Sentinel\Sentinel;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Cartalyst\Sentinel\Users\EloquentUser;
 use Laraflock\Dashboard\Exceptions\RolesException;
 use Laraflock\Dashboard\Exceptions\UsersException;
-use Laraflock\Dashboard\Contracts\AuthRepo as Auth;
-use Laraflock\Dashboard\Contracts\RoleRepo as Role;
-use Laraflock\Dashboard\Contracts\UserRepo as User;
+use Laraflock\Dashboard\Contracts\AuthRepoInterface;
+use Laraflock\Dashboard\Contracts\RoleRepoInterface;
+use Laraflock\Dashboard\Contracts\UserRepoInterface;
+use Laraflock\Dashboard\Traits\UpdateTrait;
+use Laraflock\Dashboard\Traits\ValidateTrait;
 
-class UserRepo implements User
+class UserRepo implements UserRepoInterface
 {
+    use UpdateTrait;
+    use ValidateTrait;
+
     /**
      * Auth interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
+     * @var AuthRepoInterface
      */
     protected $auth;
 
     /**
      * Role interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepo
+     * @var RoleRepoInterface
      */
     protected $role;
 
     /**
-     * Sentinel instance.
-     *
-     * @var \Cartalyst\Sentinel\Sentinel
-     */
-    protected $sentinel;
-
-    /**
-     * User instance.
-     *
-     * @var \Cartalyst\Sentinel\Users\EloquentUser
-     */
-    protected $user;
-
-    /**
      * The constructor.
-     *
-     * @param Auth         $auth
-     * @param Role         $role
-     * @param Sentinel     $sentinel
-     * @param EloquentUser $user
      */
-    public function __construct(Auth $auth, Role $role, Sentinel $sentinel, EloquentUser $user)
+    public function __construct()
     {
-        $this->auth     = $auth;
-        $this->role     = $role;
-        $this->sentinel = $sentinel;
-        $this->user     = $user;
+        $this->auth = app()->make('Laraflock\Dashboard\Contracts\AuthRepoInterface');
+        $this->role = app()->make('Laraflock\Dashboard\Contracts\RoleRepoInterface');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function all()
     {
-        return $this->user->all();
+        return EloquentUser::with('roles')->get();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAllWith($type)
+    public function find($id)
     {
-        return $this->user->with($type)
-                          ->get();
+        return EloquentUser::with('roles')->where('id', $id)->first();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getById($id)
+    public function create(array $data)
     {
-        return $this->user->find($id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getByIdWith($id, $type)
-    {
-        return $this->user->with($type)
-                          ->where('id', '=', $id)
-                          ->first();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function create(array $data, $validate = true)
-    {
+        // Setup validation rules.
         $this->rules = [
-          'email'                 => 'required|unique:users',
-          'password'              => 'required|confirmed',
-          'password_confirmation' => 'required',
+            'email'                 => 'required|unique:users',
+            'password'              => 'required|confirmed',
+            'password_confirmation' => 'required',
         ];
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
+        // Register and activate.
         $this->auth->registerAndActivate($data);
 
         return;
@@ -122,9 +88,9 @@ class UserRepo implements User
     /**
      * {@inheritDoc}
      */
-    public function update(array $data, $id, $validate = true)
+    public function update($id, array $data)
     {
-        if (!$user = $this->getById($id)) {
+        if (!$user = $this->find($id)) {
             throw new UsersException(trans('dashboard::dashboard.errors.user.found'));
         }
 
@@ -134,11 +100,11 @@ class UserRepo implements User
             $this->rules['email'] = 'required|email';
         }
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
-        $this->sentinel->update($user, $data);
+        // Update user.
+        Sentinel::update($user, $data);
 
         if (isset($data['role'])) {
 
@@ -148,7 +114,7 @@ class UserRepo implements User
 
             if (!$user->inRole($role)) {
                 $role->users()
-                     ->attach($user);
+                    ->attach($user);
             }
         }
 
@@ -160,24 +126,26 @@ class UserRepo implements User
     /**
      * {@inheritDoc}
      */
-    public function updatePassword(array $data, $validate = true)
+    public function updatePassword(array $data)
     {
         $user = $this->auth->authenticate($data);
 
+        // Setup validation rules.
         $this->rules = [
-          'new_password'              => 'required|confirmed',
-          'new_password_confirmation' => 'required',
+            'new_password'              => 'required|confirmed',
+            'new_password_confirmation' => 'required',
         ];
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
+        // Setup new password.
         $updatedData = [
-          'password' => $data['new_password'],
+            'password' => $data['new_password'],
         ];
 
-        $this->sentinel->update($user, $updatedData);
+        // Update user.
+        Sentinel::update($user, $updatedData);
 
         return;
     }
@@ -187,7 +155,7 @@ class UserRepo implements User
      */
     public function delete($id)
     {
-        if (!$user = $this->getById($id)) {
+        if (!$user = $this->find($id)) {
             throw new UsersException(trans('dashboard::dashboard.errors.user.found'));
         }
 

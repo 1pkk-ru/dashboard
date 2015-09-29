@@ -152,31 +152,31 @@ class DashboardServiceProvider extends ServiceProvider
     {
         // Bind the Auth Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\Auth\AuthRepo',
+          'Laraflock\Dashboard\Contracts\AuthRepoInterface',
           config('laraflock.dashboard.auth')
         );
 
         // Bind the Permission Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\Permission\PermissionRepo',
+          'Laraflock\Dashboard\Contracts\PermissionRepoInterface',
           config('laraflock.dashboard.permission')
         );
 
         // Bind the Role Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\Role\RoleRepo',
+          'Laraflock\Dashboard\Contracts\RoleRepoInterface',
           config('laraflock.dashboard.role')
         );
 
         // Bind the User Repo Interface
         $this->app->bind(
-          'Laraflock\Dashboard\Repositories\User\UserRepo',
+          'Laraflock\Dashboard\Contracts\UserRepoInterface',
           config('laraflock.dashboard.user')
         );
 
         // Bind the Module Repo Interface
         $this->app->singleton(
-            'Laraflock\Dashboard\Repositories\Module\ModuleRepo',
+            'Laraflock\Dashboard\Contracts\ModuleRepoInterface',
             config('laraflock.dashboard.module')
         );
     }

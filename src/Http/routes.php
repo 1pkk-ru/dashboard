@@ -22,14 +22,6 @@ $this->app['router']->group(['prefix' => 'auth', 'as' => 'auth.', 'namespace' =>
 $this->app['router']->get('dashboard', ['as' => 'dashboard.index', 'uses' => 'Laraflock\Dashboard\Controllers\DashboardController@dashboard', 'middleware' => ['user', 'roles:administrator']]);
 
 /**
- * Account management.
- */
-$this->app['router']->group(['prefix' => 'dashboard/account', 'as' => 'account.', 'namespace' => 'Laraflock\Dashboard\Controllers', 'middleware' => 'user'], function () {
-    $this->app['router']->get('/', ['as' => 'edit', 'uses' => 'AccountController@edit']);
-    $this->app['router']->post('/{id}', ['as' => 'update', 'uses' => 'AccountController@update']);
-});
-
-/**
  * Roles management.
  */
 $this->app['router']->group(['prefix' => 'dashboard/roles', 'as' => 'roles.', 'namespace' => 'Laraflock\Dashboard\Controllers', 'middleware' => ['user', 'roles:administrator']], function () {

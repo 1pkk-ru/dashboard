@@ -10,6 +10,9 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
+use Laraflock\Dashboard\Exceptions\FormValidationException;
+use Laraflock\Dashboard\Exceptions\RolesException;
+
 interface RoleRepoInterface
 {
     /**
@@ -41,33 +44,31 @@ interface RoleRepoInterface
      * Create role.
      *
      * @param array $data
-     * @param bool  $validate
      *
      * @return mixed
      *
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws FormValidationException
+     * @throws RolesException
      */
-    public function create(array $data, $validate = true);
+    public function create(array $data);
 
     /**
      * Update role.
      *
-     * @param array $data
      * @param int   $id
-     * @param bool  $validate
+     * @param array $data
      *
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws FormValidationException
+     * @throws RolesException
      */
-    public function update(array $data, $id, $validate = true);
+    public function update($id, array $data);
 
     /**
      * Delete role.
      *
      * @param int $id
      *
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws RolesException
      */
     public function delete($id);
 }

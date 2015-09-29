@@ -15,31 +15,9 @@ use Laracasts\Flash\Flash;
 use Laraflock\Dashboard\Exceptions\AuthenticationException;
 use Laraflock\Dashboard\Exceptions\FormValidationException;
 use Laraflock\Dashboard\Exceptions\RolesException;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepo;
 
 class AuthController extends BaseDashboardController
 {
-    /**
-     * Auth interface.
-     *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
-     */
-    protected $authRepo;
-
-    /**
-     * The constructor.
-     *
-     * @param \Laraflock\Dashboard\Repositories\Auth\AuthRepo $authRepo
-     */
-    public function __construct(AuthRepo $authRepo)
-    {
-        $this->authRepo = $authRepo;
-
-        $viewNamespace = config('laraflock.dashboard.viewNamespace');
-
-        view()->share(['viewNamespace' => $viewNamespace]);
-    }
-
     /**
      * Display login screen.
      *
@@ -60,7 +38,7 @@ class AuthController extends BaseDashboardController
     public function authentication(Request $request)
     {
         try {
-            $this->authRepo->authenticate($request->all());
+            $this->auth->authenticate($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -108,7 +86,7 @@ class AuthController extends BaseDashboardController
         }
 
         try {
-            $this->authRepo->register($request->all());
+            $this->auth->register($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -177,7 +155,7 @@ class AuthController extends BaseDashboardController
         }
 
         try {
-            $this->authRepo->activate($request->all());
+            $this->auth->activate($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -215,7 +193,7 @@ class AuthController extends BaseDashboardController
      */
     public function logout()
     {
-        $this->authRepo->logout();
+        $this->auth->logout();
 
         return redirect()->route('auth.login');
     }

@@ -22,10 +22,10 @@ class TestCase extends Base
     protected $baseUrl = 'http://localhost';
 
     protected $session;
-    protected $authRepository;
-    protected $permissionRepository;
-    protected $roleRepository;
-    protected $userRepository;
+    protected $auth;
+    protected $permission;
+    protected $role;
+    protected $user;
 
     /**
      * Creates the application.
@@ -67,16 +67,16 @@ class TestCase extends Base
 
         // Setup Configuration to work with Laravel for testing.
         config([
-          'database.connections.sqlite.database' => env('DB_DATABASE'),
+            'database.connections.sqlite.database' => env('DB_DATABASE'),
         ]);
 
         // Run migrations.
         $this->artisan('migrate');
 
-        $this->authRepository       = app()->make('Laraflock\Dashboard\Repositories\Auth\AuthRepositoryInterface');
-        $this->permissionRepository = app()->make('Laraflock\Dashboard\Repositories\Permission\PermissionRepositoryInterface');
-        $this->roleRepository       = app()->make('Laraflock\Dashboard\Repositories\Role\RoleRepositoryInterface');
-        $this->userRepository       = app()->make('Laraflock\Dashboard\Repositories\User\UserRepositoryInterface');
+        $this->auth       = app()->make('Laraflock\Dashboard\Contracts\AuthRepoInterface');
+        $this->permission = app()->make('Laraflock\Dashboard\Contracts\PermissionRepoInterface');
+        $this->role       = app()->make('Laraflock\Dashboard\Contracts\RoleRepoInterface');
+        $this->user       = app()->make('Laraflock\Dashboard\Contracts\UserRepoInterface');
     }
 
     public function tearDown()
@@ -94,6 +94,6 @@ class TestCase extends Base
     public function testLaravel()
     {
         $this->visit('/')
-             ->see('Laravel 5');
+            ->see('Laravel 5');
     }
 }

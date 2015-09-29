@@ -8,39 +8,26 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\Permission;
+namespace Laraflock\Dashboard\Repositories;
 
-use Illuminate\Database\QueryException;
 use Laraflock\Dashboard\Contracts\PermissionRepoInterface;
 use Laraflock\Dashboard\Exceptions\PermissionsException;
 use Laraflock\Dashboard\Models\Permission;
+use Laraflock\Dashboard\Traits\UpdateTrait;
+use Laraflock\Dashboard\Traits\ValidateTrait;
 
 
 class PermissionRepo implements PermissionRepoInterface
 {
-    /**
-     * Permission instance.
-     *
-     * @var \Laraflock\Dashboard\Models\Permission
-     */
-    protected $permission;
-
-    /**
-     * The constructor.
-     *
-     * @param \Laraflock\Dashboard\Models\Permission $permission
-     */
-    public function __construct(Permission $permission)
-    {
-        $this->permission = $permission;
-    }
+    use UpdateTrait;
+    use ValidateTrait;
 
     /**
      * {@inheritDoc}
      */
     public function all()
     {
-        return $this->permission->all();
+        return Permission::all();
     }
 
     /**
@@ -48,59 +35,65 @@ class PermissionRepo implements PermissionRepoInterface
      */
     public function find($id)
     {
-        return $this->permission->find($id);
+        return Permission::find($id);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function create(array $data, $validate = true)
+    public function create(array $data)
     {
+        // Setup validation rules.
         $this->rules = [
           'name' => 'required',
           'slug' => 'required|unique:permissions',
         ];
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
-        try {
-            $permission = $this->permission->create($data);
-        } catch (QueryException $e) {
-            throw new PermissionsException(trans('dashboard::dashboard.errors.permission.create'));
-        }
+        // Create model instance.
+        $model = new Permission();
 
-        return $permission;
+        // Update mass assignable attributes.
+        $this->updateAttributes($model, $data);
+
+        // Save model instance.
+        $model->save();
+
+        return $model;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function update(array $data, $id, $validate = true)
+    public function update($id, array $data)
     {
-        if (!$permission = $this->getById($id)) {
+        if (!$model = $this->find($id)) {
             throw new PermissionsException(trans('dashboard::dashboard.errors.permission.found'));
         }
 
+        // Setup validation rules.
         $this->rules = [
           'name' => 'required',
           'slug' => 'required|alpha_dash',
         ];
 
-        if ($permission->slug != $data['slug']) {
+        // Slug validation rules conditional.
+        if ($model->slug != $data['slug']) {
             $this->rules['slug'] = 'required|alpha_dash|unique:permissions';
         }
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
-        $permission->name = $data['name'];
-        $permission->slug = $data['slug'];
-        $permission->save();
+        // Update mass assignable attributes.
+        $this->updateAttributes($model, $data);
 
-        return $permission;
+        // Save model instance.
+        $model->save();
+
+        return $model;
     }
 
     /**
@@ -108,11 +101,11 @@ class PermissionRepo implements PermissionRepoInterface
      */
     public function delete($id)
     {
-        if (!$permission = $this->getById($id)) {
+        if (!$model = $this->find($id)) {
             throw new PermissionsException(trans('dashboard::dashboard.errors.permission.found'));
         }
 
-        $permission->delete();
+        $model->delete();
 
         return true;
     }

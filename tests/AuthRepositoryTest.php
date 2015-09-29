@@ -28,8 +28,8 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test',
         ];
 
-        $this->roleRepository->create($roleData);
-        $this->authRepository->registerAndActivate($userData, false);
+        $this->role->create($roleData);
+        $this->auth->registerAndActivate($userData, false);
     }
 
     public function testGetActiveUser()
@@ -39,9 +39,9 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test',
         ];
 
-        $user = $this->authRepository->authenticate($userData);
-        $this->authRepository->login($user);
-        $activeUser = $this->authRepository->getActiveUser();
+        $user = $this->auth->authenticate($userData);
+        $this->auth->login($user);
+        $activeUser = $this->auth->getActiveUser();
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $activeUser);
     }
@@ -53,16 +53,16 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test',
         ];
 
-        $user = $this->authRepository->authenticate($userData);
-        $this->authRepository->login($user);
-        $check = $this->authRepository->check();
+        $user = $this->auth->authenticate($userData);
+        $this->auth->login($user);
+        $check = $this->auth->check();
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $check);
     }
 
     public function testCheckFalse()
     {
-        $this->assertFalse($this->authRepository->check());
+        $this->assertFalse($this->auth->check());
     }
 
     public function testAuthenticate()
@@ -72,7 +72,7 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test',
         ];
 
-        $user = $this->authRepository->authenticate($userData);
+        $user = $this->auth->authenticate($userData);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
     }
@@ -86,7 +86,7 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test',
         ];
 
-        $this->authRepository->authenticate($userData);
+        $this->auth->authenticate($userData);
     }
 
     public function testAuthenticateAuthenticationException()
@@ -98,7 +98,7 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test2',
         ];
 
-        $this->authRepository->authenticate($userData);
+        $this->auth->authenticate($userData);
     }
 
     public function testRegister()
@@ -111,7 +111,7 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $activation = $this->authRepository->register($data, false);
+        $activation = $this->auth->register($data, false);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Activations\EloquentActivation::class, $activation);
     }
@@ -126,7 +126,7 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $this->authRepository->register($data, false);
+        $this->auth->register($data, false);
     }
 
     public function testRegisterRolesException()
@@ -141,7 +141,7 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'administrator',
         ];
 
-        $this->authRepository->register($data, false);
+        $this->auth->register($data, false);
     }
 
     public function testRegisterAndActivate()
@@ -152,7 +152,7 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $user = $this->authRepository->register($data, false);
+        $user = $this->auth->register($data, false);
 
         $this->assertTrue($user);
     }
@@ -167,7 +167,7 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $this->authRepository->registerAndActivate($data, true);
+        $this->auth->registerAndActivate($data, true);
     }
 
     public function testRegisterAndActivateAuthenticationException()
@@ -180,7 +180,7 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $this->authRepository->registerAndActivate($data, false);
+        $this->auth->registerAndActivate($data, false);
     }
 
     public function testRegisterAndActivateRolesException()
@@ -193,7 +193,7 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'administrator',
         ];
 
-        $this->authRepository->registerAndActivate($data, false);
+        $this->auth->registerAndActivate($data, false);
     }
 
     public function testActivate()
@@ -206,14 +206,14 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $activation = $this->authRepository->register($data, false);
+        $activation = $this->auth->register($data, false);
 
         $activationData = [
           'email'           => $data['email'],
           'activation_code' => $activation->code,
         ];
 
-        $activated = $this->authRepository->activate($activationData, false);
+        $activated = $this->auth->activate($activationData, false);
 
         $this->assertTrue($activated);
     }
@@ -230,19 +230,19 @@ class AuthRepositoryTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $this->authRepository->register($data, false);
+        $this->auth->register($data, false);
 
         $activationData = [
           'email'           => $data['email'],
           'activation_code' => 'notthecode',
         ];
 
-        $this->authRepository->activate($activationData, false);
+        $this->auth->activate($activationData, false);
     }
 
     public function testFindUserByCredentials()
     {
-        $user = $this->authRepository->findByCredentials(['login' => 'admin@change.me']);
+        $user = $this->auth->findByCredentials(['login' => 'admin@change.me']);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
     }
@@ -254,8 +254,8 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test',
         ];
 
-        $user      = $this->authRepository->authenticate($userData);
-        $loginUser = $this->authRepository->login($user);
+        $user      = $this->auth->authenticate($userData);
+        $loginUser = $this->auth->login($user);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $loginUser);
     }
@@ -267,7 +267,7 @@ class AuthRepositoryTest extends TestCase
           'password' => 'test',
         ];
 
-        $user = $this->authRepository->authenticate($userData);
-        dd($this->authRepository->logout($user));
+        $user = $this->auth->authenticate($userData);
+        dd($this->auth->logout($user));
     }
 }

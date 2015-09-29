@@ -9,9 +9,9 @@
  */
 
 use Illuminate\Database\Seeder;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepo as Auth;
-use Laraflock\Dashboard\Repositories\Role\RoleRepo as Role;
-use Laraflock\Dashboard\Repositories\User\UserRepo as User;
+use Laraflock\Dashboard\Repositories\AuthRepo as Auth;
+use Laraflock\Dashboard\Repositories\RoleRepo as Role;
+use Laraflock\Dashboard\Repositories\UserRepo as User;
 
 class UserTableSeeder extends Seeder
 {
@@ -67,7 +67,7 @@ class UserTableSeeder extends Seeder
         $this->auth->registerAndActivate($defaultUser, false);
 
         $role = $this->role->getBySlug('administrator');
-        $user = $this->user->getById(1);
+        $user = $this->user->find(1);
 
         $role->users()
              ->attach($user);

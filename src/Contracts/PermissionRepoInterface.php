@@ -10,6 +10,9 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
+use Laraflock\Dashboard\Exceptions\FormValidationException;
+use Laraflock\Dashboard\Exceptions\PermissionsException;
+
 interface PermissionRepoInterface
 {
     /**
@@ -32,31 +35,29 @@ interface PermissionRepoInterface
      * Create permission.
      *
      * @param array $data
-     * @param bool  $validate
      *
      * @return static
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
+     * @throws FormValidationException
      */
-    public function create(array $data, $validate = true);
+    public function create(array $data);
 
     /**
      * Update permission.
      *
      * @param array $data
      * @param int   $id
-     * @param bool  $validate
      *
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\PermissionsException
+     * @throws FormValidationException
+     * @throws PermissionsException
      */
-    public function update(array $data, $id, $validate = true);
+    public function update($id, array $data);
 
     /**
      * Delete permission.
      *
      * @param int $id
      *
-     * @throws \Laraflock\Dashboard\Exceptions\PermissionsException
+     * @throws PermissionsException
      */
     public function delete($id);
 }

@@ -11,72 +11,68 @@
 namespace Laraflock\Dashboard\Controllers;
 
 use Illuminate\Routing\Controller;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepo;
-use Laraflock\Dashboard\Repositories\Module\ModuleRepo;
-use Laraflock\Dashboard\Repositories\Permission\PermissionRepo;
-use Laraflock\Dashboard\Repositories\Role\RoleRepo;
-use Laraflock\Dashboard\Repositories\User\UserRepo;
+use Laraflock\Dashboard\Contracts\AuthRepoInterface as Auth;
+use Laraflock\Dashboard\Contracts\ModuleRepoInterface as Module;
+use Laraflock\Dashboard\Contracts\PermissionRepoInterface as Permission;
+use Laraflock\Dashboard\Contracts\RoleRepoInterface as Role;
+use Laraflock\Dashboard\Contracts\UserRepoInterface as User;
 
 class BaseDashboardController extends Controller
 {
     /**
      * Auth interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
+     * @var Auth
      */
-    protected $authRepo;
+    protected $auth;
 
     /**
      * Permission interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Permission\PermissionRepo
+     * @var Permission
      */
-    protected $permissionRepo;
+    protected $permission;
+
+    /**
+     * Module interface.
+     *
+     * @var Module
+     */
+    protected $module;
 
     /**
      * Role interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepo
+     * @var Role
      */
-    protected $roleRepo;
+    protected $role;
 
     /**
      * User interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\User\UserRepo
+     * @var User
      */
-    protected $userRepo;
+    protected $user;
 
     /**
      * The constructor.
-     *
-     * @param \Laraflock\Dashboard\Repositories\Auth\AuthRepo $authRepo
-     * @param \Laraflock\Dashboard\Repositories\Permission\PermissionRepo $permissionRepo
-     * @param \Laraflock\Dashboard\Repositories\Role\RoleRepo $roleRepo
-     * @param \Laraflock\Dashboard\Repositories\User\UserRepo $userRepo
-     * @param \Laraflock\Dashboard\Repositories\Module\ModuleRepo $moduleRepo
      */
-    public function __construct(
-        AuthRepo $authRepo,
-        PermissionRepo $permissionRepo,
-        RoleRepo $roleRepo,
-        UserRepo $userRepo,
-        ModuleRepo $moduleRepo
-    )
+    public function __construct()
     {
         $viewNamespace = config('laraflock.dashboard.viewNamespace');
 
-        $this->authRepo       = $authRepo;
-        $this->permissionRepo = $permissionRepo;
-        $this->roleRepo       = $roleRepo;
-        $this->userRepo       = $userRepo;
+        $this->auth       = app()->make('Laraflock\Dashboard\Contracts\AuthRepoInterface');
+        $this->permission = app()->make('Laraflock\Dashboard\Contracts\PermissionRepoInterface');
+        $this->module     = app()->make('Laraflock\Dashboard\Contracts\ModuleRepoInterface');
+        $this->role       = app()->make('Laraflock\Dashboard\Contracts\RoleRepoInterface');
+        $this->user       = app()->make('Laraflock\Dashboard\Contracts\UserRepoInterface');
 
-        $user = $this->authRepo->getActiveUser();
+        $user = $this->auth->getActiveUser();
 
         view()->share([
-            'activeUser' => $user,
+            'activeUser'    => $user,
             'viewNamespace' => $viewNamespace,
-            'modules' => $moduleRepo
+            'modules'       => $this->module
         ]);
     }
 

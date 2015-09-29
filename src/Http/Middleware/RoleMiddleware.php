@@ -13,8 +13,8 @@ namespace Laraflock\Dashboard\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepo as Auth;
-use Laraflock\Dashboard\Repositories\Role\RoleRepo as Role;
+use Laraflock\Dashboard\Repositories\AuthRepo as Auth;
+use Laraflock\Dashboard\Repositories\RoleRepo as Role;
 
 class RoleMiddleware
 {
@@ -34,14 +34,11 @@ class RoleMiddleware
 
     /**
      * The constructor.
-     *
-     * @param Auth $auth
-     * @param Role $role
      */
-    public function __construct(Auth $auth, Role $role)
+    public function __construct()
     {
-        $this->auth = $auth;
-        $this->role = $role;
+        $this->auth = app()->make('Laraflock\Dashboard\Contracts\AuthRepoInterface');
+        $this->role = app()->make('Laraflock\Dashboard\Contracts\RoleRepoInterface');
     }
 
     /**
@@ -61,7 +58,7 @@ class RoleMiddleware
             return redirect()->route('auth.login');
         }
 
-        if (!$role = $this->role->getBySlug($role)) {
+        if (!$role = $this->role->slug($role)) {
             Flash::error(trans('dashboard::dashboard.flash.access_denied'));
 
             // Redirect back to the previous page where request was made.

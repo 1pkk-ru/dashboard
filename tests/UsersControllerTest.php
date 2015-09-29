@@ -35,8 +35,8 @@ class UsersControllerTest extends TestCase
           'password_confirmation' => 'test',
         ];
 
-        $this->roleRepository->create($roleData);
-        $this->userRepository->create($userData, false);
+        $this->role->create($roleData);
+        $this->user->create($userData, false);
     }
 
     public function testIndexRoute()

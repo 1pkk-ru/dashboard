@@ -13,7 +13,7 @@ namespace Laraflock\Dashboard\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
-use Laraflock\Dashboard\Repositories\Auth\AuthRepo as Auth;
+use Laraflock\Dashboard\Repositories\AuthRepo as Auth;
 
 class PermissionMiddleware
 {

@@ -34,8 +34,8 @@ class AuthControllerTest extends TestCase
           'password' => 'test',
         ];
 
-        $this->roleRepository->create($roleData);
-        $this->authRepository->registerAndActivate($userData, false);
+        $this->role->create($roleData);
+        $this->auth->registerAndActivate($userData, false);
     }
 
     public function testLoginRoute()
@@ -53,7 +53,7 @@ class AuthControllerTest extends TestCase
 
         $this->call('POST', '/auth/login', $data);
 
-        $user = $this->authRepository->check();
+        $user = $this->auth->check();
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
     }
@@ -217,7 +217,7 @@ class AuthControllerTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $activation = $this->authRepository->register($data, false);
+        $activation = $this->auth->register($data, false);
 
         $activationData = [
           'email'           => $data['email'],
@@ -252,7 +252,7 @@ class AuthControllerTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $activation = $this->authRepository->register($data, false);
+        $activation = $this->auth->register($data, false);
 
         $activationData = [
           'email'           => $data['email'],
@@ -278,7 +278,7 @@ class AuthControllerTest extends TestCase
           'role'     => 'registered',
         ];
 
-        $this->authRepository->register($data, false);
+        $this->auth->register($data, false);
 
         $activationData = [
           'email'           => $data['email'],
@@ -298,8 +298,8 @@ class AuthControllerTest extends TestCase
           'password' => 'test',
         ];
 
-        $user = $this->authRepository->authenticate($userData);
-        $this->authRepository->login($user);
+        $user = $this->auth->authenticate($userData);
+        $this->auth->login($user);
 
         $this->visit('/auth/logout')
              ->assertResponseOk();

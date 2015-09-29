@@ -1,10 +1,21 @@
 <?php
 
-namespace Laraflock\Dashboard\Repositories\Module;
+/**
+ * @package     Dashboard
+ * @author      Ian Olson <me@ianolson.io>
+ * @author      Daniel Klabbers <daniel@hyn.me>
+ * @license     MIT
+ * @copyright   2015, Laraflock
+ * @link        https://github.com/laraflock
+ */
+
+namespace Laraflock\Dashboard\Repositories;
 
 use Illuminate\Support\Collection;
+use Laraflock\Dashboard\Contracts\ModuleInterface;
+use Laraflock\Dashboard\Contracts\ModuleRepoInterface;
 
-class ModuleRepo implements ModuleRepo
+class ModuleRepo implements ModuleRepoInterface
 {
 
     /**
@@ -12,6 +23,9 @@ class ModuleRepo implements ModuleRepo
      */
     protected $modules;
 
+    /**
+     * The constructor.
+     */
     public function __construct()
     {
         $this->modules = new Collection();
@@ -20,10 +34,10 @@ class ModuleRepo implements ModuleRepo
     /**
      * Registers a dashboard module into the ecosystem
      *
-     * @param Module $module
+     * @param ModuleInterface $module
      * @return bool
      */
-    public function register(Module $module)
+    public function register(ModuleInterface $module)
     {
         $this->modules->put(get_class($module), $module);
     }
@@ -41,10 +55,10 @@ class ModuleRepo implements ModuleRepo
     /**
      * Verify whether a module has been registered
      *
-     * @param Module $module
+     * @param ModuleInterface $module
      * @return mixed
      */
-    public function isRegistered(Module $module)
+    public function isRegistered(ModuleInterface $module)
     {
         return $this->modules->offsetExists(get_class($module));
     }

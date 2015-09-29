@@ -43,9 +43,9 @@ class BaseDashboardControllerTest extends TestCase
           'password' => 'test',
         ];
 
-        $this->roleRepository->create($roleData);
-        $this->adminRole = $this->roleRepository->create($roleData2);
-        $this->authRepository->registerAndActivate($userData, false);
+        $this->role->create($roleData);
+        $this->adminRole = $this->role->create($roleData2);
+        $this->auth->registerAndActivate($userData, false);
     }
 
     public function testDashboardNotLoggedIn()
@@ -66,7 +66,7 @@ class BaseDashboardControllerTest extends TestCase
 
         $this->call('POST', '/auth/login', $data);
 
-        $user = $this->authRepository->check();
+        $user = $this->auth->check();
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Users\EloquentUser::class, $user);
 

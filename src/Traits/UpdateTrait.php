@@ -10,8 +10,6 @@
 
 namespace Laraflock\Dashboard\Traits;
 
-use Illuminate\Support\Facades\Cache;
-
 trait UpdateTrait
 {
     /**
@@ -19,7 +17,7 @@ trait UpdateTrait
      *
      * @var array
      */
-    protected $nonRequiredAttributes;
+    protected $nonRequiredAttributes = [];
 
     /**
      * Update model attributes from a request.

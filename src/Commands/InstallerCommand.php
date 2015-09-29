@@ -46,21 +46,21 @@ class InstallerCommand extends Command
     /**
      * Auth interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Auth\AuthRepo
+     * @var \Laraflock\Dashboard\Repositories\AuthRepo
      */
     protected $authRepo;
 
     /**
      * Permission interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Permission\PermissionRepo
+     * @var \Laraflock\Dashboard\Repositories\PermissionRepo
      */
     protected $permissionRepo;
 
     /**
      * Role interface.
      *
-     * @var \Laraflock\Dashboard\Repositories\Role\RoleRepo
+     * @var \Laraflock\Dashboard\Repositories\RoleRepo
      */
     protected $roleRepo;
 
@@ -69,9 +69,9 @@ class InstallerCommand extends Command
      */
     public function __construct()
     {
-        $this->authRepo       = app()->make('Laraflock\Dashboard\Repositories\Auth\AuthRepo');
-        $this->permissionRepo = app()->make('Laraflock\Dashboard\Repositories\Permission\PermissionRepo');
-        $this->roleRepo       = app()->make('Laraflock\Dashboard\Repositories\Role\RoleRepo');
+        $this->authRepo       = app()->make('Laraflock\Dashboard\Repositories\AuthRepo');
+        $this->permissionRepo = app()->make('Laraflock\Dashboard\Repositories\PermissionRepo');
+        $this->roleRepo       = app()->make('Laraflock\Dashboard\Repositories\RoleRepo');
 
         parent::__construct();
     }

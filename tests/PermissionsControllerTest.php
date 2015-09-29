@@ -39,11 +39,11 @@ class PermissionsControllerTest extends TestCase
           'password' => 'test',
         ];
 
-        $this->roleRepository->create($roleData);
-        $this->permissionRepository->create($permissionData);
-        $this->authRepository->registerAndActivate($userData, false);
-        $user = $this->authRepository->authenticate($userData);
-        $this->authRepository->login($user);
+        $this->role->create($roleData);
+        $this->permission->create($permissionData);
+        $this->auth->registerAndActivate($userData, false);
+        $user = $this->auth->authenticate($userData);
+        $this->auth->login($user);
     }
 
     public function testIndexRoute()

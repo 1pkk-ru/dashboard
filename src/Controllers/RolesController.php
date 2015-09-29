@@ -19,13 +19,29 @@ use Laraflock\Dashboard\Exceptions\RolesException;
 class RolesController extends BaseDashboardController
 {
     /**
+     * Permissions.
+     *
+     * @var \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    protected $permissions;
+
+    /**
+     * The constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->permissions = $this->permission->all();
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return Response
      */
     public function index()
     {
-        $roles = $this->roleRepo->getAll();
+        $roles = $this->role->all();
 
         return $this->view('roles.index')->with(['roles' => $roles]);
     }
@@ -37,9 +53,7 @@ class RolesController extends BaseDashboardController
      */
     public function create()
     {
-        $permissions = $this->permissionRepo->getAll();
-
-        return $this->view('roles.create')->with(['permissions' => $permissions]);
+        return $this->view('roles.create')->with(['permissions' => $this->permissions]);
     }
 
     /**
@@ -52,7 +66,7 @@ class RolesController extends BaseDashboardController
     public function store(Request $request)
     {
         try {
-            $this->roleRepo->create($request->all());
+            $this->role->create($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -76,15 +90,13 @@ class RolesController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$role = $this->roleRepo->getById($id)) {
+        if (!$role = $this->role->find($id)) {
             Flash::error(trans('dashboard::dashboard.errors.role.found'));
 
             return redirect()->route('roles.index');
         }
 
-        $permissions = $this->permissionRepo->getAll();
-
-        return $this->view('roles.edit')->with(['role' => $role, 'permissions' => $permissions]);
+        return $this->view('roles.edit')->with(['role' => $role, 'permissions' => $this->permissions]);
     }
 
     /**
@@ -98,7 +110,7 @@ class RolesController extends BaseDashboardController
     public function update(Request $request, $id)
     {
         try {
-            $this->roleRepo->update($request->all(), $id);
+            $this->role->update($id, $request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -127,7 +139,7 @@ class RolesController extends BaseDashboardController
     public function delete($id)
     {
         try {
-            $this->roleRepo->delete($id);
+            $this->role->delete($id);
         } catch (RolesException $e) {
             Flash::error($e->getMessage());
 

@@ -9,7 +9,7 @@
  */
 
 use Illuminate\Database\Seeder;
-use Laraflock\Dashboard\Repositories\Role\RoleRepo as Role;
+use Laraflock\Dashboard\Repositories\RoleRepo as Role;
 
 class RoleTableSeeder extends Seeder
 {

@@ -15,8 +15,6 @@ use Illuminate\Http\Response;
 use Laracasts\Flash\Flash;
 use Laraflock\Dashboard\Exceptions\FormValidationException;
 use Laraflock\Dashboard\Exceptions\PermissionsException;
-use Laraflock\Dashboard\Services\Auth\AuthService;
-use Laraflock\Dashboard\Services\Permission\PermissionService;
 
 class PermissionsController extends BaseDashboardController
 {
@@ -27,7 +25,7 @@ class PermissionsController extends BaseDashboardController
      */
     public function index()
     {
-        $permissions = $this->permissionRepo->getAll();
+        $permissions = $this->permission->all();
 
         return $this->view('permissions.index')->with(['permissions' => $permissions]);
     }
@@ -52,7 +50,7 @@ class PermissionsController extends BaseDashboardController
     public function store(Request $request)
     {
         try {
-            $this->permissionRepo->create($request->all());
+            $this->permission->create($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -76,7 +74,7 @@ class PermissionsController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$permission = $this->permissionRepo->getById($id)) {
+        if (!$permission = $this->permission->find($id)) {
             Flash::error(trans('dashboard::dashboard.errors.permission.found'));
 
             return redirect()->route('permissions.index');
@@ -96,7 +94,7 @@ class PermissionsController extends BaseDashboardController
     public function update(Request $request, $id)
     {
         try {
-            $this->permissionRepo->update($request->all(), $id);
+            $this->permission->update($id, $request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
@@ -125,7 +123,7 @@ class PermissionsController extends BaseDashboardController
     public function delete($id)
     {
         try {
-            $this->permissionRepo->delete($id);
+            $this->permission->delete($id);
         } catch (PermissionsException $e) {
             Flash::error($e->getMessage());
 

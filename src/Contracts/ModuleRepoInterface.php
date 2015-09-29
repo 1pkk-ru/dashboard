@@ -16,10 +16,10 @@ interface ModuleRepoInterface
     /**
      * Registers a dashboard module into the ecosystem
      *
-     * @param Module $module
+     * @param ModuleInterface $module
      * @return bool
      */
-    public function register(Module $module);
+    public function register(ModuleInterface $module);
 
     /**
      * Loads all registered dashboard modules
@@ -31,8 +31,8 @@ interface ModuleRepoInterface
     /**
      * Verify whether a module has been registered
      *
-     * @param Module $module
+     * @param ModuleInterface $module
      * @return mixed
      */
-    public function isRegistered(Module $module);
+    public function isRegistered(ModuleInterface $module);
 }

@@ -34,10 +34,10 @@ class RolesControllerTest extends TestCase
           'password' => 'test',
         ];
 
-        $this->roleRepository->create($roleData);
-        $this->authRepository->registerAndActivate($userData, false);
-        $user = $this->authRepository->authenticate($userData);
-        $this->authRepository->login($user);
+        $this->role->create($roleData);
+        $this->auth->registerAndActivate($userData, false);
+        $user = $this->auth->authenticate($userData);
+        $this->auth->login($user);
     }
 
     public function testIndexRoute()

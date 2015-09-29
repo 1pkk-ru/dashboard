@@ -10,6 +10,11 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
+use Laraflock\Dashboard\Exceptions\AuthenticationException;
+use Laraflock\Dashboard\Exceptions\FormValidationException;
+use Laraflock\Dashboard\Exceptions\RolesException;
+use Laraflock\Dashboard\Exceptions\UsersException;
+
 interface UserRepoInterface
 {
     /**
@@ -34,7 +39,7 @@ interface UserRepoInterface
      * @param array $data
      *
      * @return bool
-     * @throws \Laraflock\Dashboard\Exceptions\AuthenticationException
+     * @throws AuthenticationException
      */
     public function create(array $data);
 
@@ -45,9 +50,9 @@ interface UserRepoInterface
      * @param int   $id
      * @param bool  $validate
      *
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
-     * @throws \Laraflock\Dashboard\Exceptions\UsersException
+     * @throws FormValidationException
+     * @throws RolesException
+     * @throws UsersException
      */
     public function update($id, array $data);
 
@@ -56,7 +61,7 @@ interface UserRepoInterface
      *
      * @param int $id
      *
-     * @throws \Laraflock\Dashboard\Exceptions\UsersException
+     * @throws UsersException
      */
     public function delete($id);
 }

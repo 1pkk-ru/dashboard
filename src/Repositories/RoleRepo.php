@@ -8,73 +8,66 @@
  * @link        https://github.com/laraflock
  */
 
-namespace Laraflock\Dashboard\Repositories\Role;
+namespace Laraflock\Dashboard\Repositories;
 
 use Cartalyst\Sentinel\Roles\EloquentRole;
-use Cartalyst\Sentinel\Sentinel;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Database\QueryException;
+use Laraflock\Dashboard\Contracts\RoleRepoInterface;
 use Laraflock\Dashboard\Exceptions\RolesException;
+use Laraflock\Dashboard\Traits\UpdateTrait;
+use Laraflock\Dashboard\Traits\ValidateTrait;
 
 
-class RoleRepo implements RoleRepo
+class RoleRepo implements RoleRepoInterface
 {
+    use UpdateTrait;
+    use ValidateTrait;
+
     /**
      * EloquentRole instance.
      *
-     * @var \Cartalyst\Sentinel\Roles\EloquentRole
+     * @var EloquentRole
      */
     protected $role;
 
     /**
-     * Sentinel instance.
-     *
-     * @var \Cartalyst\Sentinel\Sentinel
+     * {@inheritDoc}
      */
-    protected $sentinel;
-
-    public function __construct(EloquentRole $role, Sentinel $sentinel)
+    public function all()
     {
-        $this->role     = $role;
-        $this->sentinel = $sentinel;
+        return EloquentRole::all();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function find($id)
     {
-        return $this->role->all();
+        return Sentinel::findRoleById($id);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getById($id)
+    public function slug($slug)
     {
-        return $this->sentinel->findRoleById($id);
+        return Sentinel::findRoleBySlug($slug);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getBySlug($slug)
+    public function create(array $data)
     {
-        return $this->sentinel->findRoleBySlug($slug);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function create(array $data, $validate = true)
-    {
+        // Setup validation rules.
         $this->rules = [
-          'slug' => 'required|alpha_dash|unique:roles',
-          'name' => 'required|alpha_dash|unique:roles',
+            'slug' => 'required|alpha_dash|unique:roles',
+            'name' => 'required|alpha_dash|unique:roles',
         ];
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
         // Convert the checkbox values of "1" to true, so permission checking works with Sentinel.
         if (isset($data['permissions'])) {
@@ -84,9 +77,9 @@ class RoleRepo implements RoleRepo
         }
 
         try {
-            $role = $this->sentinel->getRoleRepo()
-                                   ->createModel()
-                                   ->create($data);
+            $role = Sentinel::getRoleRepository()
+                ->createModel()
+                ->create($data);
         } catch (QueryException $e) {
             throw new RolesException(trans('dashboard::dashboard.errors.role.create'));
         }
@@ -97,27 +90,26 @@ class RoleRepo implements RoleRepo
     /**
      * {@inheritDoc}
      */
-    public function update(array $data, $id, $validate = true)
+    public function update($id, array $data)
     {
-        if (!$role = $this->getById($id)) {
+        if (!$model = $this->find($id)) {
             throw new RolesException(trans('dashboard::dashboard.errors.role.found'));
         }
 
-        if ($role->name != $data['name']) {
+        if ($model->name != $data['name']) {
             $this->rules['name'] = 'required|alpha_dash|unique:roles';
         } else {
             $this->rules['name'] = 'required|alpha_dash';
         }
 
-        if ($role->slug != $data['slug']) {
+        if ($model->slug != $data['slug']) {
             $this->rules['slug'] = 'required|alpha_dash|unique:roles';
         } else {
             $this->rules['slug'] = 'required|alpha_dash';
         }
 
-        if ($validate) {
-            $this->validate($data);
-        }
+        // Run validation.
+        $this->validate($data);
 
         // Convert the checkbox values of "1" to true, so permission checking works with Sentinel.
         if (isset($data['permissions'])) {
@@ -128,12 +120,14 @@ class RoleRepo implements RoleRepo
             $data['permissions'] = [];
         }
 
-        $role->name        = $data['name'];
-        $role->slug        = $data['slug'];
-        $role->permissions = $data['permissions'];
-        $role->save();
+        $this->updateAttributes($model, $data);
 
-        return $role;
+        $model->name        = $data['name'];
+        $model->slug        = $data['slug'];
+        $model->permissions = $data['permissions'];
+        $model->save();
+
+        return $model;
     }
 
     /**
@@ -141,12 +135,23 @@ class RoleRepo implements RoleRepo
      */
     public function delete($id)
     {
-        if (!$role = $this->getById($id)) {
+        if (!$role = $this->find($id)) {
             throw new RolesException(trans('dashboard::dashboard.errors.role.found'));
         }
 
         $role->delete();
 
         return true;
+    }
+
+    /**
+     * Update the permissions of the model.
+     *
+     * @param EloquentRole $model
+     * @param array        $data
+     */
+    protected function permissions($model, array &$data)
+    {
+
     }
 }

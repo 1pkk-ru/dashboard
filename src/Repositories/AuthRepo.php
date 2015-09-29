@@ -10,40 +10,43 @@
 
 namespace Laraflock\Dashboard\Repositories;
 
-use Cartalyst\Sentinel\Activations\IlluminateActivationRepository;
+use Cartalyst\Sentinel\Activations\IlluminateActivationRepository as Activation;
 use Cartalyst\Sentinel\Sentinel;
 use Cartalyst\Sentinel\Users\EloquentUser;
 use Illuminate\Database\QueryException;
-use Laraflock\Dashboard\Contracts\AuthInterface;
+use Laraflock\Dashboard\Contracts\AuthRepoInterface;
 use Laraflock\Dashboard\Exceptions\AuthenticationException;
 use Laraflock\Dashboard\Exceptions\RolesException;
+use Laraflock\Dashboard\Traits\ValidateTrait;
 
 
-class AuthRepo implements AuthInterface
+class AuthRepo implements AuthRepoInterface
 {
+    use ValidateTrait;
+
     /**
      * Activation interface.
      *
-     * @var \Cartalyst\Sentinel\Activations\ActivationRepo
+     * @var Activation
      */
-    protected $illuminateActivationRepo;
+    protected $activation;
 
     /**
      * Sentinel instance.
      *
-     * @var \Cartalyst\Sentinel\Sentinel
+     * @var Sentinel
      */
     protected $sentinel;
 
     /**
-     * The constructor.
      *
-     * @param \Cartalyst\Sentinel\Sentinel $sentinel
+     * @param Activation $activation
+     * @param Sentinel                       $sentinel
      */
-    public function __construct(IlluminateActivationRepo $illuminateActivationRepo, Sentinel $sentinel)
+    public function __construct(Activation $activation, Sentinel $sentinel)
     {
-        $this->illuminateActivationRepo = $illuminateActivationRepo;
-        $this->sentinel                       = $sentinel;
+        $this->activation = $activation;
+        $this->sentinel   = $sentinel;
     }
 
     /**
@@ -68,8 +71,8 @@ class AuthRepo implements AuthInterface
     public function authenticate(array $data)
     {
         $this->rules = [
-          'email'    => 'required|email',
-          'password' => 'required',
+            'email'    => 'required|email',
+            'password' => 'required',
         ];
 
         $remember = false;
@@ -93,9 +96,9 @@ class AuthRepo implements AuthInterface
     public function register(array $data, $validate = true)
     {
         $this->rules = [
-          'email'                 => 'required|unique:users',
-          'password'              => 'required|confirmed',
-          'password_confirmation' => 'required',
+            'email'                 => 'required|unique:users',
+            'password'              => 'required|confirmed',
+            'password_confirmation' => 'required',
         ];
 
         if ($validate) {
@@ -127,9 +130,9 @@ class AuthRepo implements AuthInterface
         }
 
         $role->users()
-             ->attach($user);
+            ->attach($user);
 
-        if (!$activation = $this->illuminateActivationRepo->create($user)) {
+        if (!$activation = $this->activation->create($user)) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.activation.create'));
         }
 
@@ -142,9 +145,9 @@ class AuthRepo implements AuthInterface
     public function registerAndActivate(array $data, $validate = true)
     {
         $this->rules = [
-          'email'                 => 'required|unique:users',
-          'password'              => 'required|confirmed',
-          'password_confirmation' => 'required',
+            'email'                 => 'required|unique:users',
+            'password'              => 'required|confirmed',
+            'password_confirmation' => 'required',
         ];
 
         if ($validate) {
@@ -166,7 +169,7 @@ class AuthRepo implements AuthInterface
         }
 
         $role->users()
-             ->attach($user);
+            ->attach($user);
 
         return;
     }
@@ -177,8 +180,8 @@ class AuthRepo implements AuthInterface
     public function activate(array $data, $validate = true)
     {
         $this->rules = [
-          'email'           => 'required|email',
-          'activation_code' => 'required',
+            'email'           => 'required|email',
+            'activation_code' => 'required',
         ];
 
         if ($validate) {
@@ -187,7 +190,7 @@ class AuthRepo implements AuthInterface
 
         $user = $this->findByCredentials(['login' => $data['email']]);
 
-        if (!$this->illuminateActivationRepo->complete($user, $data['activation_code'])) {
+        if (!$this->activation->complete($user, $data['activation_code'])) {
             throw new AuthenticationException(trans('dashboard::dashboard.errors.auth.activation.complete'));
         }
 

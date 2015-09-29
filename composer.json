@@ -14,6 +14,11 @@
       "name": "Ian Olson",
       "email": "me@ianolson.io",
       "role": "Lead Developer"
+    },
+    {
+      "name": "Daniel Klabbers",
+      "email": "daniel@hyn.me",
+      "role": "Developer"
     }
   ],
   "require": {

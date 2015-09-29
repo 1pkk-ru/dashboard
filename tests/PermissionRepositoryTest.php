@@ -23,26 +23,26 @@ class PermissionRepositoryTest extends TestCase
           'slug' => 'admin',
         ];
 
-        $this->permissionRepository->create($permissionData, false);
+        $this->permission->create($permissionData);
     }
 
-    public function testGetAll()
+    public function testAll()
     {
-        $permissions = $this->permissionRepository->getAll();
+        $permissions = $this->permission->all();
 
         $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $permissions);
     }
 
-    public function testGetById()
+    public function testFind()
     {
-        $permission = $this->permissionRepository->getById(1);
+        $permission = $this->permission->find(1);
 
         $this->assertInstanceOf(\Laraflock\Dashboard\Models\Permission::class, $permission);
     }
 
-    public function testGetByIdNull()
+    public function testFindNull()
     {
-        $permission = $this->permissionRepository->getById(2);
+        $permission = $this->permission->find(2);
 
         $this->assertNull($permission);
     }
@@ -54,7 +54,7 @@ class PermissionRepositoryTest extends TestCase
           'slug' => 'registered',
         ];
 
-        $permission = $this->permissionRepository->create($data, false);
+        $permission = $this->permission->create($data);
 
         $this->assertInstanceOf(\Laraflock\Dashboard\Models\Permission::class, $permission);
     }
@@ -68,19 +68,7 @@ class PermissionRepositoryTest extends TestCase
           'slug' => 'admin',
         ];
 
-        $this->permissionRepository->create($data);
-    }
-
-    public function testCreatePermissionsException()
-    {
-        $this->setExpectedException('Laraflock\Dashboard\Exceptions\PermissionsException');
-
-        $data = [
-          'name' => 'Administrator (Full Access)',
-          'slug' => 'admin',
-        ];
-
-        $this->permissionRepository->create($data, false);
+        $this->permission->create($data);
     }
 
     public function testUpdate()
@@ -90,7 +78,7 @@ class PermissionRepositoryTest extends TestCase
             'slug' => 'admin',
         ];
 
-        $permission = $this->permissionRepository->update($data, 1, false);
+        $permission = $this->permission->update(1, $data);
 
         $this->assertInstanceOf(\Laraflock\Dashboard\Models\Permission::class, $permission);
     }
@@ -104,7 +92,7 @@ class PermissionRepositoryTest extends TestCase
           'slug' => 'admin',
         ];
 
-        $this->permissionRepository->update($data, 2, false);
+        $this->permission->update(2, $data);
     }
 
     public function testUpdateFormValidationException()
@@ -116,12 +104,12 @@ class PermissionRepositoryTest extends TestCase
             'slug' => 'no spaces',
         ];
 
-        $this->permissionRepository->update($data, 1);
+        $this->permission->update(1, $data);
     }
 
     public function testDelete()
     {
-        $delete = $this->permissionRepository->delete(1);
+        $delete = $this->permission->delete(1);
 
         $this->assertTrue($delete);
     }
@@ -130,6 +118,6 @@ class PermissionRepositoryTest extends TestCase
     {
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\PermissionsException');
 
-        $this->permissionRepository->delete(2);
+        $this->permission->delete(2);
     }
 }

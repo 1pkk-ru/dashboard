@@ -23,26 +23,26 @@ class RoleRepositoryTest extends TestCase
           'slug' => 'registered',
         ];
 
-        $this->roleRepository->create($data);
+        $this->role->create($data);
     }
 
     public function testGetAll()
     {
-        $roles = $this->roleRepository->getAll();
+        $roles = $this->role->all();
 
         $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $roles);
     }
 
     public function testGetById()
     {
-        $role = $this->roleRepository->getById(1);
+        $role = $this->role->find(1);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Roles\EloquentRole::class, $role);
     }
 
     public function testGetByIdNull()
     {
-        $role = $this->roleRepository->getById(2);
+        $role = $this->role->find(2);
 
         $this->assertNull($role);
     }
@@ -54,7 +54,7 @@ class RoleRepositoryTest extends TestCase
           'slug' => 'admin',
         ];
 
-        $role = $this->roleRepository->create($data, false);
+        $role = $this->role->create($data);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Roles\EloquentRole::class, $role);
     }
@@ -68,19 +68,7 @@ class RoleRepositoryTest extends TestCase
           'slug' => 'registered',
         ];
 
-        $this->roleRepository->create($data);
-    }
-
-    public function testCreateRolesException()
-    {
-        $this->setExpectedException('Laraflock\Dashboard\Exceptions\RolesException');
-
-        $data = [
-          'name' => 'Registered',
-          'slug' => 'registered',
-        ];
-
-        $this->roleRepository->create($data, false);
+        $this->role->create($data);
     }
 
     public function testUpdate()
@@ -90,7 +78,7 @@ class RoleRepositoryTest extends TestCase
           'slug' => 'registered',
         ];
 
-        $role = $this->roleRepository->update($data, 1);
+        $role = $this->role->update(1, $data);
 
         $this->assertInstanceOf(\Cartalyst\Sentinel\Roles\EloquentRole::class, $role);
     }
@@ -104,7 +92,7 @@ class RoleRepositoryTest extends TestCase
           'slug' => 'registered',
         ];
 
-        $this->roleRepository->update($data, 2);
+        $this->role->update(2, $data);
     }
 
     public function testUpdateFormValidationException()
@@ -116,12 +104,12 @@ class RoleRepositoryTest extends TestCase
           'slug' => 'registered space',
         ];
 
-        $this->roleRepository->update($data, 1);
+        $this->role->update(1, $data);
     }
 
     public function testDelete()
     {
-        $delete = $this->roleRepository->delete(1);
+        $delete = $this->role->delete(1);
 
         $this->assertTrue($delete);
     }
@@ -130,6 +118,6 @@ class RoleRepositoryTest extends TestCase
     {
         $this->setExpectedException('Laraflock\Dashboard\Exceptions\RolesException');
 
-        $this->roleRepository->delete(2);
+        $this->role->delete(2);
     }
 }

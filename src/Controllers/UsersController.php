@@ -20,16 +20,31 @@ use Laraflock\Dashboard\Exceptions\UsersException;
 class UsersController extends BaseDashboardController
 {
     /**
+     * Roles.
+     *
+     * @var static
+     */
+    protected $roles;
+
+    /**
+     * The constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->roles = $this->role->all()->lists('name', 'slug');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return Response
      */
     public function index()
     {
-        $users = $this->userRepo->getAllWith('roles');
+        $users = $this->user->all();
 
-        return $this->view('users.index')
-                    ->with(['users' => $users]);
+        return $this->view('users.index')->with(['users' => $users]);
     }
 
     /**
@@ -39,11 +54,7 @@ class UsersController extends BaseDashboardController
      */
     public function create()
     {
-        $roles = $this->roleRepo->getAll()
-                                               ->lists('name', 'slug');
-
-        return $this->view('users.create')
-                    ->with('roles', $roles);
+        return $this->view('users.create')->with('roles', $this->roles);
     }
 
     /**
@@ -56,14 +67,14 @@ class UsersController extends BaseDashboardController
     public function store(Request $request)
     {
         try {
-            $this->userRepo->create($request->all());
+            $this->user->create($request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
             return redirect()
-              ->route('users.create')
-              ->withErrors($e->getErrors())
-              ->withInput();
+                ->route('users.create')
+                ->withErrors($e->getErrors())
+                ->withInput();
         }
 
         Flash::success(trans('dashboard::dashboard.flash.user.create.success'));
@@ -80,14 +91,13 @@ class UsersController extends BaseDashboardController
      */
     public function edit($id)
     {
-        if (!$user = $this->userRepo->getByIdWith($id, 'roles')) {
+        if (!$user = $this->user->find($id)) {
             Flash::error(trans('dashboard::dashboard.errors.user.found'));
 
             return redirect()->route('users.index');
         }
 
-        $currentRoles = $user->getRoles()
-                             ->lists('name');
+        $currentRoles = $user->getRoles()->lists('name');
 
         if (empty($currentRoles)) {
             $currentRoles = new Collection(['name' => 'Not Available']);
@@ -96,11 +106,10 @@ class UsersController extends BaseDashboardController
         $currentRoles->sortBy('name');
         $currentRoles = implode(', ', $currentRoles->toArray());
 
-        $roles = $this->roleRepo->getAll()
-                                               ->lists('name', 'slug');
+        $roles = $this->role->all()->lists('name', 'slug');
 
         return $this->view('users.edit')
-                    ->with(['user' => $user, 'currentRoles' => $currentRoles, 'roles' => $roles]);
+            ->with(['user' => $user, 'currentRoles' => $currentRoles, 'roles' => $roles]);
     }
 
     /**
@@ -114,14 +123,14 @@ class UsersController extends BaseDashboardController
     public function update(Request $request, $id)
     {
         try {
-            $this->userRepo->update($request->all(), $id);
+            $this->user->update($id, $request->all());
         } catch (FormValidationException $e) {
             Flash::error($e->getMessage());
 
             return redirect()
-              ->route('users.edit', ['id' => $id])
-              ->withErrors($e->getErrors())
-              ->withInput();
+                ->route('users.edit', ['id' => $id])
+                ->withErrors($e->getErrors())
+                ->withInput();
         } catch (UsersException $e) {
             Flash::error($e->getMessage());
 
@@ -143,7 +152,7 @@ class UsersController extends BaseDashboardController
     public function delete($id)
     {
         try {
-            $this->userRepo->delete($id);
+            $this->user->delete($id);
         } catch (UsersException $e) {
             Flash::error($e->getMessage());
 

@@ -10,7 +10,11 @@
 
 namespace Laraflock\Dashboard\Contracts;
 
-interface AuthInterface
+use Laraflock\Dashboard\Exceptions\AuthenticationException;
+use Laraflock\Dashboard\Exceptions\FormValidationException;
+use Laraflock\Dashboard\Exceptions\RolesException;
+
+interface AuthRepoInterface
 {
     /**
      * Get active user.
@@ -31,8 +35,8 @@ interface AuthInterface
      *
      * @param array $data
      *
-     * @throws \Laraflock\Dashboard\Exceptions\AuthenticationException
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
+     * @throws AuthenticationException
+     * @throws FormValidationException
      *
      * @return mixed
      */
@@ -42,41 +46,38 @@ interface AuthInterface
      * Register a user.
      *
      * @param array $data
-     * @param bool  $validate
      *
-     * @throws \Laraflock\Dashboard\Exceptions\AuthenticationException
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws AuthenticationException
+     * @throws FormValidationException
+     * @throws RolesException
      *
      * @return mixed
      */
-    public function register(array $data, $validate = true);
+    public function register(array $data);
 
     /**
      * Register and activate user if activations are false.
      *
      * @param array $data
-     * @param bool  $validate
      *
-     * @throws \Laraflock\Dashboard\Exceptions\AuthenticationException
-     * @throws \Laraflock\Dashboard\Exceptions\FormValidationException
-     * @throws \Laraflock\Dashboard\Exceptions\RolesException
+     * @throws AuthenticationException
+     * @throws FormValidationException
+     * @throws RolesException
      *
      * @return mixed
      */
-    public function registerAndActivate(array $data, $validate = true);
+    public function registerAndActivate(array $data);
 
     /**
      * Activate a user.
      *
      * @param array $data
-     * @param bool  $validate
      *
-     * @throws \Laraflock\Dashboard\Exceptions\AuthenticationException
+     * @throws AuthenticationException
      *
      * @return mixed
      */
-    public function activate(array $data, $validate = true);
+    public function activate(array $data);
 
     /**
      * Find user by login credentials.
